@@ -2612,19 +2612,28 @@ class App extends React.Component<AppProps, AppState> {
       ),
       // Safari-only desktop pinch zoom
       addEventListener(
-        this.props.handleGestureGlobally ? document : this.excalidrawContainerRef.current,
+        this.props.handleGestureGlobally
+          ? document
+          : this.excalidrawContainerRef.current,
+        //@ts-expect-error safari only event
         EVENT.GESTURE_START,
         this.onGestureStart as any,
         false,
       ),
       addEventListener(
-        this.props.handleGestureGlobally ? document : this.excalidrawContainerRef.current,
+        this.props.handleGestureGlobally
+          ? document
+          : this.excalidrawContainerRef.current,
+        //@ts-expect-error safari only event
         EVENT.GESTURE_CHANGE,
         this.onGestureChange as any,
         false,
       ),
       addEventListener(
-        this.props.handleGestureGlobally ? document : this.excalidrawContainerRef.current,
+        this.props.handleGestureGlobally
+          ? document
+          : this.excalidrawContainerRef.current,
+        //@ts-expect-error safari only event
         EVENT.GESTURE_END,
         this.onGestureEnd as any,
         false,
