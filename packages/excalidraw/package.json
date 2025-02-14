@@ -1,18 +1,16 @@
 {
-  "name": "@excalidraw/excalidraw",
+  "name": "@oviceinc/excalidraw",
   "version": "0.17.1",
   "main": "./dist/prod/index.js",
   "type": "module",
   "module": "./dist/prod/index.js",
   "exports": {
     ".": {
-      "development": "./dist/dev/index.js",
       "types": "./dist/excalidraw/index.d.ts",
-      "default": "./dist/prod/index.js"
+      "default": "./dist/excalidraw.js"
     },
     "./index.css": {
-      "development": "./dist/dev/index.css",
-      "default": "./dist/prod/index.css"
+      "default": "./dist/style.css"
     }
   },
   "types": "./dist/excalidraw/index.d.ts",
@@ -23,7 +21,7 @@
     "access": "public"
   },
   "description": "Excalidraw as a React component",
-  "repository": "https://github.com/excalidraw/excalidraw",
+  "repository": "https://github.com/oviceinc/excalidraw",
   "license": "MIT",
   "keywords": [
     "excalidraw",
@@ -133,8 +131,8 @@
   "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
   "scripts": {
     "gen:types": "rm -rf types && tsc",
-    "build": "vite build",
-    "pack": "yarn build && yarn pack",
+    "build": "tsc || vite build",
+    "pack": "build && yarn pack",
     "start": "vite",
     "size": "yarn build && size-limit"
   }
