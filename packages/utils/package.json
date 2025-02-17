@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@excalidraw/utils",
   "version": "0.1.2",
   "main": "./dist/prod/index.js",

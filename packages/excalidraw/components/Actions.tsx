@@ -39,19 +39,9 @@ import {
 } from "../element/textElement";
 
 import "./Actions.scss";
-import DropdownMenu from "./dropdownMenu/DropdownMenu";
-import {
-  EmbedIcon,
-  extraToolsIcon,
-  frameToolIcon,
-  mermaidLogoIcon,
-  laserPointerToolIcon,
-  MagicIcon,
-} from "./icons";
-import { KEYS } from "../keys";
-import { useTunnels } from "../context/tunnels";
 import { CLASSES } from "../constants";
 import { alignActionsPredicate } from "../actions/actionAlign";
+import { laserPointerToolIcon } from "./icons";
 
 export const canChangeStrokeColor = (
   appState: UIAppState,
@@ -277,13 +267,47 @@ export const ShapesSwitcher = ({
   app: AppClassProperties;
   UIOptions: AppProps["UIOptions"];
 }) => {
-  const [isExtraToolsMenuOpen, setIsExtraToolsMenuOpen] = useState(false);
 
-  const frameToolSelected = activeTool.type === "frame";
-  const laserToolSelected = activeTool.type === "laser";
-  const embeddableToolSelected = activeTool.type === "embeddable";
+  const renderLserToolButton = () => {
+    const fillable = false;
+    const icon = laserPointerToolIcon;
+    const value = "laser";
+    const key = "k";
+    const numericKey = undefined;
 
-  const { TTDDialogTriggerTunnel } = useTunnels();
+    const label = t(`toolBar.${value}`);
+    const letter =
+      key && capitalizeString(typeof key === "string" ? key : key[0]);
+    const shortcut = letter
+      ? `${letter} ${t("helpDialog.or")} ${numericKey}`
+      : `${numericKey}`;
+    return (
+      <ToolButton
+        className={clsx("Shape", { fillable })}
+        key={value}
+        type="radio"
+        icon={icon}
+        checked={activeTool.type === value}
+        name="editor-current-shape"
+        title={`${capitalizeString(label)} — ${shortcut}`}
+        keyBindingLabel={numericKey || letter}
+        aria-label={capitalizeString(label)}
+        aria-keyshortcuts={shortcut}
+        data-testid={`toolbar-${value}`}
+        onPointerDown={({ pointerType }) => {
+          if (!appState.penDetected && pointerType === "pen") {
+            app.togglePenMode(true);
+          }
+        }}
+        onChange={({ pointerType }) => {
+          if (appState.activeTool.type !== value) {
+            trackEvent("toolbar", value, "ui");
+          }
+          app.setActiveTool({ type: value });
+        }}
+      />
+    );
+  };
 
   return (
     <>
@@ -336,99 +360,7 @@ export const ShapesSwitcher = ({
           />
         );
       })}
-      <div className="App-toolbar__divider" />
-
-      <DropdownMenu open={isExtraToolsMenuOpen}>
-        <DropdownMenu.Trigger
-          className={clsx("App-toolbar__extra-tools-trigger", {
-            "App-toolbar__extra-tools-trigger--selected":
-              frameToolSelected ||
-              embeddableToolSelected ||
-              // in collab we're already highlighting the laser button
-              // outside toolbar, so let's not highlight extra-tools button
-              // on top of it
-              (laserToolSelected && !app.props.isCollaborating),
-          })}
-          onToggle={() => setIsExtraToolsMenuOpen(!isExtraToolsMenuOpen)}
-          title={t("toolBar.extraTools")}
-        >
-          {extraToolsIcon}
-          {app.props.aiEnabled !== false && (
-            <div
-              style={{
-                display: "inline-flex",
-                marginLeft: "auto",
-                padding: "2px 4px",
-                borderRadius: 6,
-                fontSize: 8,
-                fontFamily: "Cascadia, monospace",
-                position: "absolute",
-                background: "var(--color-promo)",
-                color: "var(--color-surface-lowest)",
-                bottom: 3,
-                right: 4,
-              }}
-            >
-              AI
-            </div>
-          )}
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content
-          onClickOutside={() => setIsExtraToolsMenuOpen(false)}
-          onSelect={() => setIsExtraToolsMenuOpen(false)}
-          className="App-toolbar__extra-tools-dropdown"
-        >
-          <DropdownMenu.Item
-            onSelect={() => app.setActiveTool({ type: "frame" })}
-            icon={frameToolIcon}
-            shortcut={KEYS.F.toLocaleUpperCase()}
-            data-testid="toolbar-frame"
-            selected={frameToolSelected}
-          >
-            {t("toolBar.frame")}
-          </DropdownMenu.Item>
-          <DropdownMenu.Item
-            onSelect={() => app.setActiveTool({ type: "embeddable" })}
-            icon={EmbedIcon}
-            data-testid="toolbar-embeddable"
-            selected={embeddableToolSelected}
-          >
-            {t("toolBar.embeddable")}
-          </DropdownMenu.Item>
-          <DropdownMenu.Item
-            onSelect={() => app.setActiveTool({ type: "laser" })}
-            icon={laserPointerToolIcon}
-            data-testid="toolbar-laser"
-            selected={laserToolSelected}
-            shortcut={KEYS.K.toLocaleUpperCase()}
-          >
-            {t("toolBar.laser")}
-          </DropdownMenu.Item>
-          <div style={{ margin: "6px 0", fontSize: 14, fontWeight: 600 }}>
-            Generate
-          </div>
-          {app.props.aiEnabled !== false && <TTDDialogTriggerTunnel.Out />}
-          <DropdownMenu.Item
-            onSelect={() => app.setOpenDialog({ name: "ttd", tab: "mermaid" })}
-            icon={mermaidLogoIcon}
-            data-testid="toolbar-embeddable"
-          >
-            {t("toolBar.mermaidToExcalidraw")}
-          </DropdownMenu.Item>
-          {app.props.aiEnabled !== false && app.plugins.diagramToCode && (
-            <>
-              <DropdownMenu.Item
-                onSelect={() => app.onMagicframeToolSelect()}
-                icon={MagicIcon}
-                data-testid="toolbar-magicframe"
-              >
-                {t("toolBar.magicframe")}
-                <DropdownMenu.Item.Badge>AI</DropdownMenu.Item.Badge>
-              </DropdownMenu.Item>
-            </>
-          )}
-        </DropdownMenu.Content>
-      </DropdownMenu>
+      {renderLserToolButton()}
     </>
   );
 };
