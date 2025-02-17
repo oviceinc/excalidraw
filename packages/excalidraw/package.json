@@ -1,6 +1,6 @@
 {
   "name": "@oviceinc/excalidraw",
-  "version": "0.17.1",
+  "version": "0.17.9",
   "main": "./dist/prod/index.js",
   "type": "module",
   "module": "./dist/prod/index.js",
@@ -133,7 +133,7 @@
   "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
   "scripts": {
     "gen:types": "rm -rf types && tsc",
-    "build": "tsc || vite build",
+    "build": "tsc && vite build",
     "build:esm": "vite build",
     "pack": "build && yarn pack",
     "start": "vite",
