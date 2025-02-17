@@ -1,13 +1,9 @@
 import clsx from "clsx";
 import {
-  CANVAS_SEARCH_TAB,
   DEFAULT_SIDEBAR,
 } from "../constants";
 import { useTunnels } from "../context/tunnels";
-import { useUIAppState } from "../context/ui-appState";
 import type { MarkOptional, Merge } from "../utility-types";
-import { composeEventHandlers } from "../utils";
-import { useExcalidrawSetAppState } from "./App";
 import { withInternalFallback } from "./hoc/withInternalFallback";
 import type { SidebarProps, SidebarTriggerProps } from "./Sidebar/common";
 import { Sidebar } from "./Sidebar/Sidebar";
@@ -60,32 +56,17 @@ export const DefaultSidebar = Object.assign(
         onDock?: SidebarProps["onDock"] | false;
       }
     >) => {
-      const appState = useUIAppState();
-      const setAppState = useExcalidrawSetAppState();
-
-      const isForceDocked = appState.openSidebar?.tab === CANVAS_SEARCH_TAB;
-
       return (
         <Sidebar
           {...rest}
           name="default"
           key="default"
           className={clsx("default-sidebar", className)}
-          docked={
-            isForceDocked || (docked ?? appState.defaultSidebarDockedPreference)
-          }
-          onDock={
-            // `onDock=false` disables docking.
-            // if `docked` passed, but no onDock passed, disable manual docking.
-            isForceDocked || onDock === false || (!onDock && docked != null)
-              ? undefined
-              : // compose to allow the host app to listen on default behavior
-                composeEventHandlers(onDock, (docked) => {
-                  setAppState({ defaultSidebarDockedPreference: docked });
-                })
-          }
+          docked={true}
+          onDock={undefined}
         >
-              <SearchMenu />
+          <SearchMenu />
+          {children}
         </Sidebar>
       );
     },
