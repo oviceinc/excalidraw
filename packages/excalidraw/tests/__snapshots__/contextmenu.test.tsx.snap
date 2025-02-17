@@ -98,33 +98,6 @@ exports[`contextMenu element > right-clicking on a group should select whole gro
         },
       },
       "separator",
-      {
-        "label": "labels.selectAllElementsInFrame",
-        "name": "selectAllElementsInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "canvas",
-        },
-      },
-      {
-        "label": "labels.removeAllElementsFromFrame",
-        "name": "removeAllElementsFromFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "history",
-        },
-      },
-      {
-        "label": "labels.wrapSelectionInFrame",
-        "name": "wrapSelectionInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "element",
-        },
-      },
       "separator",
       {
         "PanelComponent": [Function],
@@ -4515,33 +4488,6 @@ exports[`contextMenu element > shows 'Group selection' in context menu for multi
         },
       },
       "separator",
-      {
-        "label": "labels.selectAllElementsInFrame",
-        "name": "selectAllElementsInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "canvas",
-        },
-      },
-      {
-        "label": "labels.removeAllElementsFromFrame",
-        "name": "removeAllElementsFromFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "history",
-        },
-      },
-      {
-        "label": "labels.wrapSelectionInFrame",
-        "name": "wrapSelectionInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "element",
-        },
-      },
       "separator",
       {
         "PanelComponent": [Function],
@@ -5728,33 +5674,6 @@ exports[`contextMenu element > shows 'Ungroup selection' in context menu for gro
         },
       },
       "separator",
-      {
-        "label": "labels.selectAllElementsInFrame",
-        "name": "selectAllElementsInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "canvas",
-        },
-      },
-      {
-        "label": "labels.removeAllElementsFromFrame",
-        "name": "removeAllElementsFromFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "history",
-        },
-      },
-      {
-        "label": "labels.wrapSelectionInFrame",
-        "name": "wrapSelectionInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "element",
-        },
-      },
       "separator",
       {
         "PanelComponent": [Function],
@@ -7664,33 +7583,6 @@ exports[`contextMenu element > shows context menu for element > [end of test] ap
         },
       },
       "separator",
-      {
-        "label": "labels.selectAllElementsInFrame",
-        "name": "selectAllElementsInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "canvas",
-        },
-      },
-      {
-        "label": "labels.removeAllElementsFromFrame",
-        "name": "removeAllElementsFromFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "history",
-        },
-      },
-      {
-        "label": "labels.wrapSelectionInFrame",
-        "name": "wrapSelectionInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "element",
-        },
-      },
       "separator",
       {
         "PanelComponent": [Function],
@@ -8644,33 +8536,6 @@ exports[`contextMenu element > shows context menu for element > [end of test] ap
         },
       },
       "separator",
-      {
-        "label": "labels.selectAllElementsInFrame",
-        "name": "selectAllElementsInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "canvas",
-        },
-      },
-      {
-        "label": "labels.removeAllElementsFromFrame",
-        "name": "removeAllElementsFromFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "history",
-        },
-      },
-      {
-        "label": "labels.wrapSelectionInFrame",
-        "name": "wrapSelectionInFrame",
-        "perform": [Function],
-        "predicate": [Function],
-        "trackEvent": {
-          "category": "element",
-        },
-      },
       "separator",
       {
         "PanelComponent": [Function],
