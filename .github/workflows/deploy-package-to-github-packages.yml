@@ -3,5 +3,4 @@ name: Deploy to GitHub Packages
 on:
   push:
     tags:
-      - '*'
-      
+      - "*"
