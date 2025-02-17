@@ -6,7 +6,7 @@ import { render, queries, waitFor, fireEvent } from "@testing-library/react";
 
 import * as toolQueries from "./queries/toolQueries";
 import type { ImportedDataState } from "../data/types";
-import { STORAGE_KEYS } from "../../../excalidraw-app/app_constants";
+
 import { getSelectedElements } from "../scene/selection";
 import type { ExcalidrawElement } from "../element/types";
 import { UI } from "./helpers/ui";
@@ -16,6 +16,20 @@ import { ORIG_ID } from "../constants";
 import { arrayToMap } from "../utils";
 import type { AllPossibleKeys } from "../utility-types";
 
+const STORAGE_KEYS = {
+  LOCAL_STORAGE_ELEMENTS: "excalidraw",
+  LOCAL_STORAGE_APP_STATE: "excalidraw-state",
+  LOCAL_STORAGE_COLLAB: "excalidraw-collab",
+  LOCAL_STORAGE_THEME: "excalidraw-theme",
+  LOCAL_STORAGE_DEBUG: "excalidraw-debug",
+  VERSION_DATA_STATE: "version-dataState",
+  VERSION_FILES: "version-files",
+
+  IDB_LIBRARY: "excalidraw-library",
+
+  // do not use apart from migrations
+  __LEGACY_LOCAL_STORAGE_LIBRARY: "excalidraw-library",
+} as const;
 const customQueries = {
   ...queries,
   ...toolQueries,

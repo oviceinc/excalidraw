@@ -125,13 +125,16 @@
     "size-limit": "9.0.0",
     "style-loader": "3.3.3",
     "ts-loader": "9.3.1",
-    "typescript": "4.9.4"
+    "typescript": "4.9.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   },
   "bugs": "https://github.com/excalidraw/excalidraw/issues",
   "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
   "scripts": {
     "gen:types": "rm -rf types && tsc",
     "build": "tsc || vite build",
+    "build:esm": "vite build",
     "pack": "build && yarn pack",
     "start": "vite",
     "size": "yarn build && size-limit"
