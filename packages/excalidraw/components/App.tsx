@@ -363,11 +363,6 @@ import {
   makeNextSelectedElementIds,
 } from "../scene/selection";
 import { actionPaste } from "../actions/actionClipboard";
-import {
-  actionRemoveAllElementsFromFrame,
-  actionSelectAllElementsInFrame,
-  actionWrapSelectionInFrame,
-} from "../actions/actionFrame";
 import { actionToggleHandTool, zoomToFit } from "../actions/actionCanvas";
 import { editorJotaiStore } from "../editor-jotai";
 import { activeConfirmDialogAtom } from "./ActiveConfirmDialog";
@@ -10767,9 +10762,6 @@ class App extends React.Component<AppProps, AppState> {
       actionCopy,
       actionPaste,
       CONTEXT_MENU_SEPARATOR,
-      actionSelectAllElementsInFrame,
-      actionRemoveAllElementsFromFrame,
-      actionWrapSelectionInFrame,
       CONTEXT_MENU_SEPARATOR,
       actionToggleCropEditor,
       CONTEXT_MENU_SEPARATOR,
