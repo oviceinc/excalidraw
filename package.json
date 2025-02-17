@@ -3,12 +3,9 @@
   "name": "excalidraw-monorepo",
   "packageManager": "yarn@1.22.22",
   "workspaces": [
-    "excalidraw-app",
     "packages/excalidraw",
     "packages/utils",
-    "packages/math",
-    "examples/excalidraw",
-    "examples/excalidraw/*"
+    "packages/math"
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
