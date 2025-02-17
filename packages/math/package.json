@@ -10,6 +10,7 @@
       "default": "./dist/prod/index.js"
     }
   },
+  "private": true,
   "types": "./dist/utils/index.d.ts",
   "files": [
     "dist/*"
