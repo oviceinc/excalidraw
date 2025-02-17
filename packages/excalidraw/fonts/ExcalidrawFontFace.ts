@@ -144,6 +144,10 @@ export class ExcalidrawFontFace {
     const assetUrl: string = uri.replace(/^\/+/, "");
     const urls: URL[] = [];
 
+    if (uri.startsWith("/")) {
+      urls.push(new URL(uri, window.location.origin));
+    }
+
     if (typeof window.EXCALIDRAW_ASSET_PATH === "string") {
       const normalizedBaseUrl = this.normalizeBaseUrl(
         window.EXCALIDRAW_ASSET_PATH,
