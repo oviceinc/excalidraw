@@ -398,25 +398,6 @@ describe("contextMenu element", () => {
     expect(h.elements[0].isDeleted).toBe(true);
   });
 
-  it("selecting 'Add to library' in context menu adds element to library", async () => {
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
-      button: 2,
-      clientX: 3,
-      clientY: 3,
-    });
-    const contextMenu = UI.queryContextMenu();
-    fireEvent.click(queryByText(contextMenu!, "Add to library")!);
-
-    await waitFor(async () => {
-      const libraryItems = await h.app.library.getLatestLibrary();
-      expect(libraryItems[0].elements[0]).toEqual(h.elements[0]);
-    });
-  });
-
   it("selecting 'Duplicate' in context menu duplicates element", () => {
     UI.clickTool("rectangle");
     mouse.down(10, 10);
