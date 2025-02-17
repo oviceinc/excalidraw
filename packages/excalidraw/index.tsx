@@ -244,7 +244,6 @@ export {
   loadLibraryFromBlob,
 } from "./data/blob";
 export { getFreeDrawSvgPath } from "./renderer/renderElement";
-export { mergeLibraryItems, getLibraryItemsHash } from "./data/library";
 export { isLinearElement } from "./element/typeChecks";
 
 export {
@@ -262,8 +261,6 @@ export {
 } from "./element/mutateElement";
 
 export { StoreAction } from "./store";
-
-export { parseLibraryTokensFromUrl, useHandleLibrary } from "./data/library";
 
 export {
   sceneCoordsToViewportCoords,

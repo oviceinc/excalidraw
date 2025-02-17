@@ -6,7 +6,6 @@ import rough from "roughjs/bin/rough";
 import clsx from "clsx";
 import { nanoid } from "nanoid";
 import {
-  actionAddToLibrary,
   actionBringForward,
   actionBringToFront,
   actionCopy,
@@ -94,7 +93,6 @@ import {
 } from "../constants";
 import type { ExportedElements } from "../data";
 import { exportCanvas, loadFromBlob } from "../data";
-import Library, { distributeLibraryItemsOnSquareGrid } from "../data/library";
 import { restore, restoreElements } from "../data/restore";
 import {
   dragNewElement,
@@ -248,7 +246,6 @@ import type {
   BinaryFiles,
   Gesture,
   GestureEvent,
-  LibraryItems,
   PointerDownState,
   SceneData,
   Device,
@@ -316,7 +313,6 @@ import {
   isSupportedImageFile,
   loadSceneOrLibraryFromBlob,
   normalizeFile,
-  parseLibraryJSON,
   resizeImageFile,
   SVGStringToFile,
 } from "../data/blob";
@@ -576,8 +572,6 @@ class App extends React.Component<AppProps, AppState> {
   public visibleElements: readonly NonDeletedExcalidrawElement[];
   private resizeObserver: ResizeObserver | undefined;
   private nearestScrollableContainer: HTMLElement | Document | undefined;
-  public library: AppClassProperties["library"];
-  public libraryItemsFromStorage: LibraryItems | undefined;
   public id: string;
   private store: Store;
   private history: History;
@@ -697,7 +691,6 @@ class App extends React.Component<AppProps, AppState> {
     };
 
     this.id = nanoid();
-    this.library = new Library(this);
     this.actionManager = new ActionManager(
       this.syncActionResult,
       () => this.state,
@@ -717,7 +710,6 @@ class App extends React.Component<AppProps, AppState> {
     if (excalidrawAPI) {
       const api: ExcalidrawImperativeAPI = {
         updateScene: this.updateScene,
-        updateLibrary: this.library.updateLibrary,
         addFiles: this.addFiles,
         resetScene: this.resetScene,
         getSceneElementsIncludingDeleted: this.getSceneElementsIncludingDeleted,
@@ -2289,16 +2281,6 @@ class App extends React.Component<AppProps, AppState> {
       } else {
         initialData = (await this.props.initialData) || null;
       }
-      if (initialData?.libraryItems) {
-        this.library
-          .updateLibrary({
-            libraryItems: initialData.libraryItems,
-            merge: true,
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
     } catch (error: any) {
       console.error(error);
       initialData = {
@@ -2524,7 +2506,6 @@ class App extends React.Component<AppProps, AppState> {
     this.resizeObserver?.disconnect();
     this.unmounted = true;
     this.removeEventListeners();
-    this.library.destroy();
     this.laserTrails.stop();
     this.eraserTrail.stop();
     this.onChangeEmitter.clear();
@@ -10226,21 +10207,6 @@ class App extends React.Component<AppProps, AppState> {
       });
     }
 
-    const libraryJSON = event.dataTransfer.getData(MIME_TYPES.excalidrawlib);
-    if (libraryJSON && typeof libraryJSON === "string") {
-      try {
-        const libraryItems = parseLibraryJSON(libraryJSON);
-        this.addElementsFromPasteOrLibrary({
-          elements: distributeLibraryItemsOnSquareGrid(libraryItems),
-          position: event,
-          files: null,
-        });
-      } catch (error: any) {
-        this.setState({ errorMessage: error.message });
-      }
-      return;
-    }
-
     if (file) {
       // Attempt to parse an excalidraw/excalidrawlib file
       await this.loadFileToCanvas(file, fileHandle);
@@ -10323,17 +10289,6 @@ class App extends React.Component<AppProps, AppState> {
           replaceFiles: true,
           storeAction: StoreAction.CAPTURE,
         });
-      } else if (ret.type === MIME_TYPES.excalidrawlib) {
-        await this.library
-          .updateLibrary({
-            libraryItems: file,
-            merge: true,
-            openLibraryMenu: true,
-          })
-          .catch((error) => {
-            console.error(error);
-            this.setState({ errorMessage: t("errors.importLibraryError") });
-          });
       }
     } catch (error: any) {
       this.setState({ isLoading: false, errorMessage: error.message });
@@ -10829,7 +10784,6 @@ class App extends React.Component<AppProps, AppState> {
       actionWrapTextInContainer,
       actionUngroup,
       CONTEXT_MENU_SEPARATOR,
-      actionAddToLibrary,
       CONTEXT_MENU_SEPARATOR,
       actionSendBackward,
       actionBringForward,

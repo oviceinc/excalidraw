@@ -344,13 +344,6 @@ const LayerUI = ({
               />
             )}
             {renderTopRightUI?.(device.editor.isMobile, appState)}
-            {!appState.viewModeEnabled &&
-              appState.openDialog?.name !== "elementLinkSelector" &&
-              // hide button when sidebar docked
-              (!isSidebarDocked ||
-                appState.openSidebar?.name !== DEFAULT_SIDEBAR.name) && (
-                <tunnels.DefaultSidebarTriggerTunnel.Out />
-              )}
             {shouldShowStats && (
               <Stats
                 app={app}
