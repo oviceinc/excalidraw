@@ -2,7 +2,6 @@ import clsx from "clsx";
 import {
   CANVAS_SEARCH_TAB,
   DEFAULT_SIDEBAR,
-  LIBRARY_SIDEBAR_TAB,
 } from "../constants";
 import { useTunnels } from "../context/tunnels";
 import { useUIAppState } from "../context/ui-appState";
@@ -10,12 +9,10 @@ import type { MarkOptional, Merge } from "../utility-types";
 import { composeEventHandlers } from "../utils";
 import { useExcalidrawSetAppState } from "./App";
 import { withInternalFallback } from "./hoc/withInternalFallback";
-import { LibraryMenu } from "./LibraryMenu";
 import type { SidebarProps, SidebarTriggerProps } from "./Sidebar/common";
 import { Sidebar } from "./Sidebar/Sidebar";
 import "../components/dropdownMenu/DropdownMenu.scss";
 import { SearchMenu } from "./SearchMenu";
-import { LibraryIcon, searchIcon } from "./icons";
 
 const DefaultSidebarTrigger = withInternalFallback(
   "DefaultSidebarTrigger",
@@ -66,8 +63,6 @@ export const DefaultSidebar = Object.assign(
       const appState = useUIAppState();
       const setAppState = useExcalidrawSetAppState();
 
-      const { DefaultSidebarTabTriggersTunnel } = useTunnels();
-
       const isForceDocked = appState.openSidebar?.tab === CANVAS_SEARCH_TAB;
 
       return (
@@ -90,26 +85,7 @@ export const DefaultSidebar = Object.assign(
                 })
           }
         >
-          <Sidebar.Tabs>
-            <Sidebar.Header>
-              <Sidebar.TabTriggers>
-                <Sidebar.TabTrigger tab={CANVAS_SEARCH_TAB}>
-                  {searchIcon}
-                </Sidebar.TabTrigger>
-                <Sidebar.TabTrigger tab={LIBRARY_SIDEBAR_TAB}>
-                  {LibraryIcon}
-                </Sidebar.TabTrigger>
-                <DefaultSidebarTabTriggersTunnel.Out />
-              </Sidebar.TabTriggers>
-            </Sidebar.Header>
-            <Sidebar.Tab tab={LIBRARY_SIDEBAR_TAB}>
-              <LibraryMenu />
-            </Sidebar.Tab>
-            <Sidebar.Tab tab={CANVAS_SEARCH_TAB}>
               <SearchMenu />
-            </Sidebar.Tab>
-            {children}
-          </Sidebar.Tabs>
         </Sidebar>
       );
     },

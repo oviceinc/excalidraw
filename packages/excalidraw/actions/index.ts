@@ -51,7 +51,6 @@ export { actionGroup, actionUngroup } from "./actionGroup";
 
 export { actionGoToCollaborator } from "./actionNavigate";
 
-export { actionAddToLibrary } from "./actionAddToLibrary";
 
 export {
   actionAlignTop,

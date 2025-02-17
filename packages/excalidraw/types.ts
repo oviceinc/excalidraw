@@ -34,7 +34,6 @@ import type { Language } from "./i18n";
 import type { ClipboardData } from "./clipboard";
 import type { isOverScrollBars } from "./scene/scrollbars";
 import type { MaybeTransformHandleType } from "./element/transformHandles";
-import type Library from "./data/library";
 import type { FileSystemHandle } from "./data/filesystem";
 import type { IMAGE_MIME_TYPES, MIME_TYPES } from "./constants";
 import type { ContextMenuItems } from "./components/ContextMenu";
@@ -662,7 +661,6 @@ export type AppClassProperties = {
   /** static canvas */
   canvas: HTMLCanvasElement;
   focusContainer(): void;
-  library: Library;
   imageCache: Map<
     FileId,
     {
@@ -766,7 +764,6 @@ export type UnsubscribeCallback = () => void;
 
 export interface ExcalidrawImperativeAPI {
   updateScene: InstanceType<typeof App>["updateScene"];
-  updateLibrary: InstanceType<typeof Library>["updateLibrary"];
   resetScene: InstanceType<typeof App>["resetScene"];
   getSceneElementsIncludingDeleted: InstanceType<
     typeof App
