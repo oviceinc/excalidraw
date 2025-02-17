@@ -134,6 +134,7 @@
   "scripts": {
     "gen:types": "rm -rf types && tsc",
     "build": "tsc || vite build",
+    "build:esm": "vite build",
     "pack": "build && yarn pack",
     "start": "vite",
     "size": "yarn build && size-limit"
