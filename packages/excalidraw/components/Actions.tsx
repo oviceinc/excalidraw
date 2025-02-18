@@ -1,4 +1,3 @@
-import { useState } from "react";
 import type { ActionManager } from "../actions/manager";
 import type {
   ExcalidrawElement,
@@ -267,7 +266,6 @@ export const ShapesSwitcher = ({
   app: AppClassProperties;
   UIOptions: AppProps["UIOptions"];
 }) => {
-
   const renderLserToolButton = () => {
     const fillable = false;
     const icon = laserPointerToolIcon;

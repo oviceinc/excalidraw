@@ -24,7 +24,6 @@ import {
   EraserIcon,
   FreedrawIcon,
   ImageIcon,
-  laserPointerToolIcon,
   LineIcon,
   RectangleIcon,
   SelectionIcon,
@@ -122,7 +121,7 @@ export const SHAPES = [
     key: KEYS.E,
     numericKey: KEYS["0"],
     fillable: false,
-  }
+  },
 ] as const;
 
 export const findShapeByKey = (key: string) => {
