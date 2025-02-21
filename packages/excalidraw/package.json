@@ -135,7 +135,7 @@
   "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
   "scripts": {
     "gen:types": "rm -rf types && tsc",
-    "build": "tsc && vite build",
+    "build": "vite build && tsc",
     "build:esm": "vite build",
     "pack": "build && yarn pack",
     "start": "vite",

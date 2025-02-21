@@ -1,0 +1,42 @@
+name: Publish to GitHub Packages
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+      - run: corepack enable
+      - name: Install dependencies
+        run: yarn install
+      - name: Bump version
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          yarn run version-patch
+          git add .
+          git commit -m "Bump version to %s [skip ci]"
+          git push origin master --tags
+
+      - name: Build package (optional)
+        run: yarn run build
+
+      - name: Publish to GitHub Packages
+        run: yarn run publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

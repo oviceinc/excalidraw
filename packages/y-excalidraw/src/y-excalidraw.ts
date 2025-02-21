@@ -28,6 +28,10 @@ export type ExcalidrawBindingAssetsStore = Y.Array<{
   val: BinaryFileData;
 }>;
 
+const isValidElement = (element: ExcalidrawElement) => {
+  return element.id != null;
+};
+
 /**
  * Manages the binding between Excalidraw and Y.js for collaborative drawing
  * Handles synchronization of elements, assets, and user awareness
@@ -51,8 +55,8 @@ export class ExcalidrawBinding {
    * @param awareness - Optional Y.js awareness instance for user presence
    */
   constructor(
-    yElements: Y.Array<{ key: string; val: ExcalidrawElement }>,
-    yAssets: Y.Array<{ key: string; val: BinaryFileData }>,
+    yElements: ExcalidrawBindingElementsStore,
+    yAssets: ExcalidrawBindingAssetsStore,
     api: ExcalidrawImperativeAPI,
     awareness?: awarenessProtocol.Awareness,
   ) {
@@ -119,9 +123,9 @@ export class ExcalidrawBinding {
         return;
       }
 
-      const remoteElements = this.#yElements.yarray.map(({ val }) => ({
-        ...val,
-      }));
+      const remoteElements = this.#yElements.yarray
+        .map(({ val }) => ({ ...val }))
+        .filter(isValidElement);
       const elements = reconcileElements(
         this.#api.getSceneElements(),
         // @ts-expect-error TODO:
@@ -234,7 +238,9 @@ export class ExcalidrawBinding {
     }
 
     // Initialize elements and assets from Y.js state
-    const initialValue = this.#yElements.yarray.map(({ val }) => ({ ...val }));
+    const initialValue = this.#yElements.yarray
+      .map(({ val }) => ({ ...val }))
+      .filter(isValidElement);
 
     this.lastVersion = hashElementsVersion(initialValue);
     this.#api.updateScene({ elements: initialValue, storeAction: "update" });
