@@ -6759,7 +6759,7 @@ class App extends React.Component<AppProps, AppState> {
 
     let nextPastePrevented = false;
     const isLinux =
-      typeof window === undefined
+      typeof window === "undefined"
         ? false
         : /Linux/.test(window.navigator.platform);
 

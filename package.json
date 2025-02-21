@@ -1,11 +1,10 @@
 {
   "private": true,
   "name": "excalidraw-monorepo",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "yarn@4.6.0",
   "workspaces": [
-    "packages/excalidraw",
-    "packages/utils",
-    "packages/math"
+    "packages/*",
+    "examples/*"
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
@@ -22,6 +21,7 @@
     "@vitest/ui": "2.0.5",
     "chai": "4.3.6",
     "dotenv": "16.0.1",
+    "eslint": "^8.0.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-config-react-app": "7.0.1",
     "eslint-plugin-prettier": "3.3.1",
