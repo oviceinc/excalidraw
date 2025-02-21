@@ -25,7 +25,6 @@ import {
   actionSendBackward,
   actionSendToBack,
   actionToggleGridMode,
-  actionToggleStats,
   actionToggleZenMode,
   actionUnbindText,
   actionBindText,
@@ -10722,7 +10721,6 @@ class App extends React.Component<AppProps, AppState> {
           actionToggleGridMode,
           actionToggleZenMode,
           actionToggleViewMode,
-          actionToggleStats,
         ];
       }
 
@@ -10740,7 +10738,6 @@ class App extends React.Component<AppProps, AppState> {
         actionToggleObjectsSnapMode,
         actionToggleZenMode,
         actionToggleViewMode,
-        actionToggleStats,
       ];
     }
 

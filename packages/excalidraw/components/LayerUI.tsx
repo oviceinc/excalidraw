@@ -57,8 +57,6 @@ import { ShapeCache } from "../scene/ShapeCache";
 import Scene from "../scene/Scene";
 import { LaserPointerButton } from "./LaserPointerButton";
 import { TTDDialog } from "./TTDDialog/TTDDialog";
-import { Stats } from "./Stats";
-import { actionToggleStats } from "../actions";
 import ElementLinkDialog from "./ElementLinkDialog";
 
 import "./LayerUI.scss";
@@ -227,12 +225,6 @@ const LayerUI = ({
       elements,
     );
 
-    const shouldShowStats =
-      appState.stats.open &&
-      !appState.zenModeEnabled &&
-      !appState.viewModeEnabled &&
-      appState.openDialog?.name !== "elementLinkSelector";
-
     return (
       <FixedSideContainer side="top">
         <div className="App-menu App-menu_top">
@@ -340,15 +332,6 @@ const LayerUI = ({
               />
             )}
             {renderTopRightUI?.(device.editor.isMobile, appState)}
-            {shouldShowStats && (
-              <Stats
-                app={app}
-                onClose={() => {
-                  actionManager.executeAction(actionToggleStats);
-                }}
-                renderCustomStats={renderCustomStats}
-              />
-            )}
           </div>
         </div>
       </FixedSideContainer>

@@ -2,12 +2,7 @@ import React from "react";
 import Scene from "../scene/Scene";
 import { API } from "../tests/helpers/api";
 import { Pointer, UI } from "../tests/helpers/ui";
-import {
-  fireEvent,
-  GlobalTestState,
-  queryByTestId,
-  render,
-} from "../tests/test-utils";
+import { fireEvent, GlobalTestState, render } from "../tests/test-utils";
 import { bindLinearElement } from "./binding";
 import { Excalidraw, mutateElement } from "../index";
 import type {
@@ -207,8 +202,6 @@ describe("elbow arrow ui", () => {
       clientX: 1,
       clientY: 1,
     });
-    const contextMenu = UI.queryContextMenu();
-    fireEvent.click(queryByTestId(contextMenu!, "stats")!);
   });
 
   it("can follow bound shapes", async () => {
@@ -247,48 +240,6 @@ describe("elbow arrow ui", () => {
       [45, 0],
       [45, 200],
       [90, 200],
-    ]);
-  });
-
-  it("can follow bound rotated shapes", async () => {
-    UI.createElement("rectangle", {
-      x: -150,
-      y: -150,
-      width: 100,
-      height: 100,
-    });
-    UI.createElement("rectangle", {
-      x: 50,
-      y: 50,
-      width: 100,
-      height: 100,
-    });
-
-    UI.clickTool("arrow");
-    UI.clickOnTestId("elbow-arrow");
-
-    mouse.reset();
-    mouse.moveTo(-43, -99);
-    mouse.click();
-    mouse.moveTo(43, 99);
-    mouse.click();
-
-    const arrow = h.scene.getSelectedElements(
-      h.state,
-    )[0] as ExcalidrawArrowElement;
-
-    mouse.click(51, 51);
-
-    const inputAngle = UI.queryStatsProperty("A")?.querySelector(
-      ".drag-input",
-    ) as HTMLInputElement;
-    UI.updateInput(inputAngle, String("40"));
-
-    expect(arrow.points.map((point) => point.map(Math.round))).toEqual([
-      [0, 0],
-      [35, 0],
-      [35, 165],
-      [103, 165],
     ]);
   });
 });
