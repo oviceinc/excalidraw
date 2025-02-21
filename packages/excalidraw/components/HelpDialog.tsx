@@ -4,7 +4,6 @@ import { KEYS } from "../keys";
 import { Dialog } from "./Dialog";
 import { getShortcutKey } from "../utils";
 import "./HelpDialog.scss";
-import { probablySupportsClipboardBlob } from "../clipboard";
 import { isDarwin, isFirefox, isWindows } from "../constants";
 import { getShortcutFromShortcutName } from "../actions/shortcuts";
 
@@ -330,12 +329,6 @@ export const HelpDialog = ({ onClose }: { onClose?: () => void }) => {
             />
             {/* firefox supports clipboard API under a flag, so we'll
                 show users what they can do in the error message */}
-            {(probablySupportsClipboardBlob || isFirefox) && (
-              <Shortcut
-                label={t("labels.copyAsPng")}
-                shortcuts={[getShortcutKey("Shift+Alt+C")]}
-              />
-            )}
             <Shortcut
               label={t("labels.copyStyles")}
               shortcuts={[getShortcutKey("CtrlOrCmd+Alt+C")]}

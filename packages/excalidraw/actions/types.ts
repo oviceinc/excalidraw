@@ -83,7 +83,6 @@ export type ActionName =
   | "loadScene"
   | "duplicateSelection"
   | "deleteSelectedElements"
-  | "changeViewBackgroundColor"
   | "clearCanvas"
   | "zoomIn"
   | "zoomOut"
@@ -117,7 +116,6 @@ export type ActionName =
   | "increaseFontSize"
   | "decreaseFontSize"
   | "unbindText"
-  | "hyperlink"
   | "bindText"
   | "unlockAllElements"
   | "toggleElementLock"
@@ -135,8 +133,6 @@ export type ActionName =
   | "autoResize"
   | "elementStats"
   | "searchMenu"
-  | "copyElementLink"
-  | "linkToElement"
   | "cropEditor"
   | "wrapSelectionInFrame";
 
@@ -192,7 +188,6 @@ export interface Action {
           | "history"
           | "menu"
           | "collab"
-          | "hyperlink"
           | "search_menu";
         action?: string;
         predicate?: (
