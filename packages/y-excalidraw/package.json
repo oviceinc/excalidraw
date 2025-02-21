@@ -8,9 +8,6 @@
     ".": {
       "types": "./dist/y-excalidraw.d.ts",
       "default": "./dist/y-excalidraw.js"
-    },
-    "./index.css": {
-      "default": "./dist/style.css"
     }
   },
   "types": "./dist/excalidraw/index.d.ts",
@@ -24,18 +21,11 @@
   "description": "Excalidraw as a React component",
   "repository": "https://github.com/oviceinc/excalidraw",
   "license": "MIT",
-  "keywords": [
-    "excalidraw",
-    "excalidraw-embed",
-    "react",
-    "npm",
-    "npm excalidraw"
-  ],
   "dependencies": {
     "y-utility": "^0.1.4"
   },
   "peerDependencies": {
-    "@oviceinc/excalidraw": "*"
+    "@oviceinc/excalidraw": "workspace:^"
   },
   "devDependencies": {
     "typescript": "4.9.4",
