@@ -90,7 +90,6 @@ describe("contextMenu element", () => {
       "zenMode",
       "viewMode",
       "objectsSnapMode",
-      "stats",
     ];
 
     expect(contextMenu).not.toBeNull();
