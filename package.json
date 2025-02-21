@@ -71,7 +71,8 @@
     "rm:node_modules": "rm -rf node_modules && rm -rf excalidraw-app/node_modules && rm -rf packages/*/node_modules",
     "clean-install": "yarn rm:node_modules && yarn install",
     "publish": "yarn workspaces foreach --all -pt npm publish",
-    "build": "yarn workspaces foreach --all -pt run build"
+    "build": "yarn workspaces foreach --all -pt run build",
+    "version-patch": "yarn workspaces foreach --all -pt version patch"
   },
   "resolutions": {
     "@types/react": "18.2.0",
