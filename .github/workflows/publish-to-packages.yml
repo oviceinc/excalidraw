@@ -24,16 +24,8 @@ jobs:
       - run: corepack enable
       - name: Install dependencies
         run: yarn install
-      - name: Bump version
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          yarn run version-patch
-          git add .
-          git commit -m "Bump version to %s [skip ci]"
-          git push origin master --tags
 
-      - name: Build package (optional)
+      - name: Build package
         run: yarn run build
 
       - name: Publish to GitHub Packages
