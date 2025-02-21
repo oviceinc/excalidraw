@@ -30,7 +30,6 @@ import {
   actionUnbindText,
   actionBindText,
   actionUngroup,
-  actionLink,
   actionToggleElementLock,
   actionToggleLinearEditor,
   actionToggleObjectsSnapMode,
@@ -447,7 +446,6 @@ import {
 } from "../../math";
 import { cropElement } from "../element/cropElement";
 import { wrapText } from "../element/textWrapping";
-import { actionCopyElementLink } from "../actions/actionElementLink";
 import { isElementLink, parseElementLinkFromURL } from "../element/elementLink";
 import {
   isMeasureTextSupported,
@@ -10786,9 +10784,6 @@ class App extends React.Component<AppProps, AppState> {
       actionFlipVertical,
       CONTEXT_MENU_SEPARATOR,
       actionToggleLinearEditor,
-      CONTEXT_MENU_SEPARATOR,
-      actionLink,
-      actionCopyElementLink,
       CONTEXT_MENU_SEPARATOR,
       actionDuplicateSelection,
       actionToggleElementLock,

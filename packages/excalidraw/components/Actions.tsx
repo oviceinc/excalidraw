@@ -111,9 +111,6 @@ export const SelectedShapeActions = ({
         hasBackground(element.type) && !isTransparent(element.backgroundColor),
     );
 
-  const showLinkIcon =
-    targetElements.length === 1 || isSingleElementBoundContainer;
-
   const showLineEditorAction =
     !appState.editingLinearElement &&
     targetElements.length === 1 &&
@@ -245,7 +242,6 @@ export const SelectedShapeActions = ({
             {!device.editor.isMobile && renderAction("deleteSelectedElements")}
             {renderAction("group")}
             {renderAction("ungroup")}
-            {showLinkIcon && renderAction("hyperlink")}
             {showCropEditorAction && renderAction("cropEditor")}
             {showLineEditorAction && renderAction("toggleLinearEditor")}
           </div>
