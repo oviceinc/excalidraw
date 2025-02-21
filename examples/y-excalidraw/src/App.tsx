@@ -18,13 +18,15 @@ function App() {
   const [api, setApi] = useState<ExcalidrawImperativeAPI | null>(null);
 
   useEffect(() => {
-    if (!api) return;
+    if (!api) {
+      return;
+    }
 
     const binding = new ExcalidrawBinding(
       ydoc.getArray("elements"),
       ydoc.getArray("assets"),
       api,
-      awareness
+      awareness,
     );
     return () => {
       binding.destroy();

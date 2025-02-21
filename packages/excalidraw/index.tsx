@@ -297,5 +297,4 @@ export { isElementLink } from "./element/elementLink";
 
 export { setCustomTextMetricsProvider } from "./element/textMeasurements";
 
-
-export * from "./types"
+export * from "./types";

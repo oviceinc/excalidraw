@@ -6,7 +6,7 @@ import { YKeyValue } from "y-utility/y-keyvalue";
 import {
   hashElementsVersion,
   reconcileElements,
-  type Excalidraw
+  type Excalidraw,
 } from "@oviceinc/excalidraw";
 
 type ExcalidrawProps = Parameters<typeof Excalidraw>[0];
@@ -16,11 +16,17 @@ type ExcalidrawImperativeAPI = Parameters<
 type UpdateSceneParam = Parameters<ExcalidrawImperativeAPI["updateScene"]>[0];
 type ExcalidrawElement = NonNullable<UpdateSceneParam["elements"]>[0];
 type Collaborators = NonNullable<UpdateSceneParam["collaborators"]>;
-type SocketId = Collaborators extends Map<infer K, infer V> ? K : never;
+type SocketId = Collaborators extends Map<infer K, unknown> ? K : never;
 type BinaryFileData = Parameters<ExcalidrawImperativeAPI["addFiles"]>[0][0];
 
-export type ExcalidrawBindingElementsStore = Y.Array<{ key: string; val: ExcalidrawElement }>
-export type ExcalidrawBindingAssetsStore =Y.Array<{ key: string; val: BinaryFileData }>
+export type ExcalidrawBindingElementsStore = Y.Array<{
+  key: string;
+  val: ExcalidrawElement;
+}>;
+export type ExcalidrawBindingAssetsStore = Y.Array<{
+  key: string;
+  val: BinaryFileData;
+}>;
 
 /**
  * Manages the binding between Excalidraw and Y.js for collaborative drawing
@@ -39,7 +45,7 @@ export class ExcalidrawBinding {
 
   /**
    * Initializes the binding between Excalidraw and Y.js
-   * @param yElements - Y.js array for storing drawing elements 
+   * @param yElements - Y.js array for storing drawing elements
    * @param yAssets - Y.js array for storing binary assets
    * @param api - Excalidraw imperative API instance
    * @param awareness - Optional Y.js awareness instance for user presence
@@ -48,7 +54,7 @@ export class ExcalidrawBinding {
     yElements: Y.Array<{ key: string; val: ExcalidrawElement }>,
     yAssets: Y.Array<{ key: string; val: BinaryFileData }>,
     api: ExcalidrawImperativeAPI,
-    awareness?: awarenessProtocol.Awareness
+    awareness?: awarenessProtocol.Awareness,
   ) {
     this.#yElements = new YKeyValue(yElements);
     this.#yAssets = new YKeyValue(yAssets);
@@ -64,7 +70,7 @@ export class ExcalidrawBinding {
             // check deletion
             for (const yElem of this.#yElements.yarray) {
               const deleted =
-              elements.find((element) => element.id === yElem.key)
+                elements.find((element) => element.id === yElem.key)
                   ?.isDeleted ?? true;
               if (deleted) {
                 this.#yElements.delete(yElem.key);
@@ -72,7 +78,10 @@ export class ExcalidrawBinding {
             }
             for (const element of elements) {
               const remoteElements = this.#yElements.get(element.id);
-              if (remoteElements?.versionNonce !== element.versionNonce || remoteElements?.version !== element.version) {
+              if (
+                remoteElements?.versionNonce !== element.versionNonce ||
+                remoteElements?.version !== element.version
+              ) {
                 this.#yElements.set(element.id, { ...element });
               }
             }
@@ -80,17 +89,14 @@ export class ExcalidrawBinding {
           this.lastVersion = version;
         }
         if (files) {
-          
           const newFiles = Object.entries(files).filter(([id, file]) => {
-
             return this.#yAssets.get(id) == null;
-
           });
 
           this.#yAssets.doc?.transact(() => {
-              for (const [id, file] of newFiles) {
-                this.#yAssets.set(file.id, { ...file });
-              }
+            for (const [id, file] of newFiles) {
+              this.#yAssets.set(id, { ...file });
+            }
           }, this);
         }
 
@@ -98,61 +104,70 @@ export class ExcalidrawBinding {
           // update selected awareness
           this.awareness.setLocalStateField(
             "selectedElementIds",
-            state.selectedElementIds
+            state.selectedElementIds,
           );
         }
-      })
+      }),
     );
 
     // Listen for remote changes in Y.js elements and sync to Excalidraw
     const _remoteElementsChangeHandler = (
       event: Array<Y.YEvent<any>>,
-      txn: Y.Transaction
+      txn: Y.Transaction,
     ) => {
       if (txn.origin === this) {
         return;
       }
 
-      const remoteElements = this.#yElements.yarray.map(({ val }) => ({...val}));
+      const remoteElements = this.#yElements.yarray.map(({ val }) => ({
+        ...val,
+      }));
       const elements = reconcileElements(
         this.#api.getSceneElements(),
-        // @ts-expect-error TODO: 
+        // @ts-expect-error TODO:
         remoteElements,
-        this.#api.getAppState()
+        this.#api.getAppState(),
       );
 
       this.#api.updateScene({ elements, storeAction: "update" });
     };
     this.#yElements.yarray.observeDeep(_remoteElementsChangeHandler);
     this.subscriptions.push(() =>
-      this.#yElements.yarray.unobserveDeep(_remoteElementsChangeHandler)
+      this.#yElements.yarray.unobserveDeep(_remoteElementsChangeHandler),
     );
 
     // Listen for remote changes in Y.js assets and sync to Excalidraw
     const _remoteFilesChangeHandler = (
-      changes: Map<string, { action: 'delete', oldValue: BinaryFileData } | { action: 'update', oldValue: BinaryFileData, newValue: BinaryFileData } | { action: 'add', newValue: BinaryFileData }>,
-      txn: Y.Transaction
+      changes: Map<
+        string,
+        | { action: "delete"; oldValue: BinaryFileData }
+        | {
+            action: "update";
+            oldValue: BinaryFileData;
+            newValue: BinaryFileData;
+          }
+        | { action: "add"; newValue: BinaryFileData }
+      >,
+      txn: Y.Transaction,
     ) => {
       if (txn.origin === this) {
         return;
       }
 
-
       const addedFiles = [...changes.entries()].flatMap(([key, change]) => {
-        if (change.action === 'add') {
+        if (change.action === "add") {
           return [change.newValue];
         }
-        return []
-
-      })
+        return [];
+      });
       for (const assets of addedFiles) {
         this.addedFileIds.add(assets.id);
       }
       this.#api.addFiles(addedFiles);
     };
-    this.#yAssets.on("change",_remoteFilesChangeHandler); // only observe and not observe deep as assets are only added/deleted not updated
+    this.#yAssets.on("change", _remoteFilesChangeHandler); // only observe and not observe deep as assets are only added/deleted not updated
     this.subscriptions.push(() => {
-      this.#yAssets.off("change",_remoteFilesChangeHandler);
+      this.#yAssets.off("change", _remoteFilesChangeHandler);
     });
 
     if (awareness) {
@@ -219,14 +234,13 @@ export class ExcalidrawBinding {
     }
 
     // Initialize elements and assets from Y.js state
-    const initialValue = 
-      this.#yElements.yarray.map(({ val }) => ({...val}))
-    
+    const initialValue = this.#yElements.yarray.map(({ val }) => ({ ...val }));
+
     this.lastVersion = hashElementsVersion(initialValue);
     this.#api.updateScene({ elements: initialValue, storeAction: "update" });
 
     // init assets
-    const initialAssets =this.#yAssets.yarray.map(({ val }) => val);
+    const initialAssets = this.#yAssets.yarray.map(({ val }) => val);
 
     for (const assets of initialAssets) {
       this.addedFileIds.add(assets.id);
