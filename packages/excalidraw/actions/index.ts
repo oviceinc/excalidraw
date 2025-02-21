@@ -66,13 +66,7 @@ export {
 
 export { actionFlipHorizontal, actionFlipVertical } from "./actionFlip";
 
-export {
-  actionCopy,
-  actionCut,
-  actionCopyAsPng,
-  actionCopyAsSvg,
-  copyText,
-} from "./actionClipboard";
+export { actionCopy, actionCut, copyText } from "./actionClipboard";
 
 export { actionToggleGridMode } from "./actionToggleGridMode";
 export { actionToggleZenMode } from "./actionToggleZenMode";
