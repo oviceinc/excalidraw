@@ -2792,7 +2792,7 @@ __metadata:
     vite: "npm:5.0.12"
     y-utility: "npm:^0.1.4"
   peerDependencies:
-    "@oviceinc/excalidraw": "*"
+    "@oviceinc/excalidraw": "workspace:^"
   languageName: unknown
   linkType: soft
 
