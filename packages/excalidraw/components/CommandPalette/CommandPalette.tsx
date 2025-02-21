@@ -43,11 +43,7 @@ import { InlineIcon } from "../InlineIcon";
 import { SHAPES } from "../../shapes";
 import { canChangeBackgroundColor, canChangeStrokeColor } from "../Actions";
 import { useStableCallback } from "../../hooks/useStableCallback";
-import {
-  actionClearCanvas,
-  actionLink,
-  actionToggleSearchMenu,
-} from "../../actions";
+import { actionClearCanvas, actionToggleSearchMenu } from "../../actions";
 import { activeConfirmDialogAtom } from "../ActiveConfirmDialog";
 import type { CommandPaletteItem } from "./types";
 import * as defaultItems from "./defaultCommandPaletteItems";
@@ -55,10 +51,6 @@ import { trackEvent } from "../../analytics";
 import { useStable } from "../../hooks/useStable";
 
 import "./CommandPalette.scss";
-import {
-  actionCopyElementLink,
-  actionLinkToElement,
-} from "../../actions/actionElementLink";
 
 const lastUsedPaletteItem = atom<CommandPaletteItem | null>(null);
 
@@ -284,9 +276,6 @@ function CommandPaletteInner({
         actionManager.actions.decreaseFontSize,
         actionManager.actions.toggleLinearEditor,
         actionManager.actions.cropEditor,
-        actionLink,
-        actionCopyElementLink,
-        actionLinkToElement,
       ].map((action: Action) =>
         actionToCommand(
           action,
