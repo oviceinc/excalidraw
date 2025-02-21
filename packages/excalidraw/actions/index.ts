@@ -21,7 +21,6 @@ export {
 } from "./actionProperties";
 
 export {
-  actionChangeViewBackgroundColor,
   actionClearCanvas,
   actionZoomIn,
   actionZoomOut,

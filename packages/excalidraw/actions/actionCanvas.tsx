@@ -1,4 +1,3 @@
-import { ColorPicker } from "../components/ColorPicker/ColorPicker";
 import {
   handIcon,
   MoonIcon,
@@ -34,49 +33,10 @@ import {
   isEraserActive,
   isHandToolActive,
 } from "../appState";
-import { DEFAULT_CANVAS_BACKGROUND_PICKS } from "../colors";
 import type { SceneBounds } from "../element/bounds";
 import { setCursor } from "../cursor";
 import { StoreAction } from "../store";
 import { clamp, roundToStep } from "../../math";
-
-export const actionChangeViewBackgroundColor = register({
-  name: "changeViewBackgroundColor",
-  label: "labels.canvasBackground",
-  paletteName: "Change canvas background color",
-  trackEvent: false,
-  predicate: (elements, appState, props, app) => {
-    return (
-      !!app.props.UIOptions.canvasActions.changeViewBackgroundColor &&
-      !appState.viewModeEnabled
-    );
-  },
-  perform: (_, appState, value) => {
-    return {
-      appState: { ...appState, ...value },
-      storeAction: !!value.viewBackgroundColor
-        ? StoreAction.CAPTURE
-        : StoreAction.NONE,
-    };
-  },
-  PanelComponent: ({ elements, appState, updateData, appProps }) => {
-    // FIXME move me to src/components/mainMenu/DefaultItems.tsx
-    return (
-      <ColorPicker
-        palette={null}
-        topPicks={DEFAULT_CANVAS_BACKGROUND_PICKS}
-        label={t("labels.canvasBackground")}
-        type="canvasBackground"
-        color={appState.viewBackgroundColor}
-        onChange={(color) => updateData({ viewBackgroundColor: color })}
-        data-testid="canvas-background-picker"
-        elements={elements}
-        appState={appState}
-        updateData={updateData}
-      />
-    );
-  },
-});
 
 export const actionClearCanvas = register({
   name: "clearCanvas",

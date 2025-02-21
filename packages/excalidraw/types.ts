@@ -616,7 +616,6 @@ export type ExportOpts = {
 // (see manager renderAction). We also override canvasAction values in
 // Excalidraw package index.tsx.
 export type CanvasActions = Partial<{
-  changeViewBackgroundColor: boolean;
   clearCanvas: boolean;
   export: false | ExportOpts;
   loadScene: boolean;
