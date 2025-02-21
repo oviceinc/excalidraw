@@ -296,3 +296,5 @@ export { getDataURL } from "./data/blob";
 export { isElementLink } from "./element/elementLink";
 
 export { setCustomTextMetricsProvider } from "./element/textMeasurements";
+
+export * from "./types";

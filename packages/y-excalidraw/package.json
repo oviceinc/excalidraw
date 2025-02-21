@@ -1,0 +1,50 @@
+{
+  "name": "@oviceinc/y-excalidraw",
+  "version": "0.1.0",
+  "main": "./dist/y-excalidraw.js",
+  "type": "module",
+  "module": "./dist/y-excalidraw.js",
+  "exports": {
+    ".": {
+      "types": "./dist/y-excalidraw.d.ts",
+      "default": "./dist/y-excalidraw.js"
+    },
+    "./index.css": {
+      "default": "./dist/style.css"
+    }
+  },
+  "types": "./dist/excalidraw/index.d.ts",
+  "files": [
+    "dist/*"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "description": "Excalidraw as a React component",
+  "repository": "https://github.com/oviceinc/excalidraw",
+  "license": "MIT",
+  "keywords": [
+    "excalidraw",
+    "excalidraw-embed",
+    "react",
+    "npm",
+    "npm excalidraw"
+  ],
+  "dependencies": {
+    "y-utility": "^0.1.4"
+  },
+  "peerDependencies": {
+    "@oviceinc/excalidraw": "*"
+  },
+  "devDependencies": {
+    "typescript": "4.9.4",
+    "vite": "5.0.12"
+  },
+  "bugs": "https://github.com/excalidraw/excalidraw/issues",
+  "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
+  "scripts": {
+    "build": "tsc",
+    "pack": "build && yarn pack"
+  }
+}
