@@ -3,11 +3,9 @@ import {
   FONT_FAMILY_FALLBACKS,
   CJK_HAND_DRAWN_FALLBACK_FONT,
   WINDOWS_EMOJI_FALLBACK_FONT,
-  getFontFamilyFallbacks,
 } from "../constants";
 import { isTextElement } from "../element";
 import { getContainerElement } from "../element/textElement";
-import { containsCJK } from "../element/textWrapping";
 import { ShapeCache } from "../scene/ShapeCache";
 import { getFontString, PromisePool, promiseTry } from "../utils";
 import { ExcalidrawFontFace } from "./ExcalidrawFontFace";
@@ -159,46 +157,6 @@ export class Fonts {
     return Fonts.loadFontFaces(fontFamilies, charsPerFamily);
   };
 
-  /**
-   * Generate CSS @font-face declarations for the given elements.
-   */
-  public static async generateFontFaceDeclarations(
-    elements: readonly ExcalidrawElement[],
-  ) {
-    const families = Fonts.getUniqueFamilies(elements);
-    const charsPerFamily = Fonts.getCharsPerFamily(elements);
-
-    // for simplicity, assuming we have just one family with the CJK handdrawn fallback
-    const familyWithCJK = families.find((x) =>
-      getFontFamilyFallbacks(x).includes(CJK_HAND_DRAWN_FALLBACK_FONT),
-    );
-
-    if (familyWithCJK) {
-      const characters = Fonts.getCharacters(charsPerFamily, familyWithCJK);
-
-      if (containsCJK(characters)) {
-        const family = FONT_FAMILY_FALLBACKS[CJK_HAND_DRAWN_FALLBACK_FONT];
-
-        // adding the same characters to the CJK handrawn family
-        charsPerFamily[family] = new Set(characters);
-
-        // the order between the families and fallbacks is important, as fallbacks need to be defined first and in the reversed order
-        // so that they get overriden with the later defined font faces, i.e. in case they share some codepoints
-        families.unshift(FONT_FAMILY_FALLBACKS[CJK_HAND_DRAWN_FALLBACK_FONT]);
-      }
-    }
-
-    // don't trigger hundreds of concurrent requests (each performing fetch, creating a worker, etc.),
-    // instead go three requests at a time, in a controlled manner, without completely blocking the main thread
-    // and avoiding potential issues such as rate limits
-    const iterator = Fonts.fontFacesStylesGenerator(families, charsPerFamily);
-    const concurrency = 3;
-    const fontFaces = await new PromisePool(iterator, concurrency).all();
-
-    // dedup just in case (i.e. could be the same font faces with 0 glyphs)
-    return Array.from(new Set(fontFaces));
-  }
-
   private static async loadFontFaces(
     fontFamilies: Array<ExcalidrawTextElement["fontFamily"]>,
     charsPerFamily: Record<number, Set<string>>,
@@ -253,52 +211,6 @@ export class Fonts {
                 .get(fontFamily)
                 ?.fontFaces.map((x) => x.urls)}"`,
               e,
-            );
-          }
-        });
-      }
-    }
-  }
-
-  private static *fontFacesStylesGenerator(
-    families: Array<number>,
-    charsPerFamily: Record<number, Set<string>>,
-  ): Generator<Promise<void | readonly [number, string]>> {
-    for (const [familyIndex, family] of families.entries()) {
-      const { fontFaces, metadata } = Fonts.registered.get(family) ?? {};
-
-      if (!Array.isArray(fontFaces)) {
-        console.error(
-          `Couldn't find registered fonts for font-family "${family}"`,
-          Fonts.registered,
-        );
-        continue;
-      }
-
-      if (metadata?.local) {
-        // don't inline local fonts
-        continue;
-      }
-
-      for (const [fontFaceIndex, fontFace] of fontFaces.entries()) {
-        yield promiseTry(async () => {
-          try {
-            const characters = Fonts.getCharacters(charsPerFamily, family);
-            const fontFaceCSS = await fontFace.toCSS(characters);
-
-            if (!fontFaceCSS) {
-              return;
-            }
-
-            // giving a buffer of 10K font faces per family
-            const fontFaceOrder = familyIndex * 10_000 + fontFaceIndex;
-            const fontFaceTuple = [fontFaceOrder, fontFaceCSS] as const;
-
-            return fontFaceTuple;
-          } catch (error) {
-            console.error(
-              `Couldn't transform font-face to css for family "${fontFace.fontFace.family}"`,
-              error,
             );
           }
         });
