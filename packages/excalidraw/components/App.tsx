@@ -29,7 +29,6 @@ import {
   actionUngroup,
   actionToggleElementLock,
   actionToggleLinearEditor,
-  actionToggleObjectsSnapMode,
   actionToggleCropEditor,
 } from "../actions";
 import { createRedoAction, createUndoAction } from "../actions/actionHistory";
@@ -10729,7 +10728,6 @@ class App extends React.Component<AppProps, AppState> {
         actionUnlockAllElements,
         CONTEXT_MENU_SEPARATOR,
         actionToggleGridMode,
-        actionToggleObjectsSnapMode,
         actionToggleZenMode,
         actionToggleViewMode,
       ];

@@ -70,7 +70,6 @@ export { actionCopy, actionCut, copyText } from "./actionClipboard";
 
 export { actionToggleGridMode } from "./actionToggleGridMode";
 export { actionToggleZenMode } from "./actionToggleZenMode";
-export { actionToggleObjectsSnapMode } from "./actionToggleObjectsSnapMode";
 
 export { actionUnbindText, actionBindText } from "./actionBoundText";
 export { actionToggleElementLock } from "./actionElementLock";
