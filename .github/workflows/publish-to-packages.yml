@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages
+name: Publish to GitHub Packages if needed
 
 on:
   push:
@@ -31,6 +31,6 @@ jobs:
         run: yarn run build
 
       - name: Publish to GitHub Packages
-        run: yarn run publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
+          yarn run publish

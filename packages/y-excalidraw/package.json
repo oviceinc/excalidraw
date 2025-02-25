@@ -1,6 +1,6 @@
 {
   "name": "@oviceinc/y-excalidraw",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "./dist/y-excalidraw.js",
   "type": "module",
   "module": "./dist/y-excalidraw.js",
@@ -35,6 +35,7 @@
   "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
   "scripts": {
     "build": "tsc",
-    "pack": "build && yarn pack"
+    "pack": "yarn build && yarn pack",
+    "publish": "npm publish || true"
   }
 }
