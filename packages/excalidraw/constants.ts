@@ -296,8 +296,8 @@ export const DEFAULT_UI_OPTIONS: AppProps["UIOptions"] = {
 // breakpoints
 // -----------------------------------------------------------------------------
 // md screen
-export const MQ_MAX_WIDTH_PORTRAIT = 730;
-export const MQ_MAX_WIDTH_LANDSCAPE = 1000;
+export const MQ_MAX_WIDTH_PORTRAIT = 640;
+export const MQ_MAX_WIDTH_LANDSCAPE = 640;
 export const MQ_MAX_HEIGHT_LANDSCAPE = 500;
 // sidebar
 export const MQ_RIGHT_SIDEBAR_MIN_WIDTH = 1229;
