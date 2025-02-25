@@ -22,7 +22,6 @@ export type ShortcutName =
       | "bringForward"
       | "sendToBack"
       | "bringToFront"
-      | "copyAsPng"
       | "group"
       | "ungroup"
       | "gridMode"
@@ -86,7 +85,6 @@ const shortcutMap: Record<ShortcutName, string[]> = {
       ? getShortcutKey("CtrlOrCmd+Alt+]")
       : getShortcutKey("CtrlOrCmd+Shift+]"),
   ],
-  copyAsPng: [getShortcutKey("Shift+Alt+C")],
   group: [getShortcutKey("CtrlOrCmd+G")],
   ungroup: [getShortcutKey("CtrlOrCmd+Shift+G")],
   gridMode: [getShortcutKey("CtrlOrCmd+'")],

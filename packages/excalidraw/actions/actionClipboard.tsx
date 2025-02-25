@@ -1,19 +1,17 @@
-import { CODES, KEYS } from "../keys";
+import { KEYS } from "../keys";
 import { register } from "./register";
 import {
   copyTextToSystemClipboard,
   copyToClipboard,
   createPasteEvent,
-  probablySupportsClipboardBlob,
   probablySupportsClipboardWriteText,
   readSystemClipboard,
 } from "../clipboard";
 import { actionDeleteSelected } from "./actionDeleteSelected";
-import { exportCanvas, prepareElementsForExport } from "../data/index";
 import { getTextFromElements, isTextElement } from "../element";
 import { t } from "../i18n";
 import { isFirefox } from "../constants";
-import { DuplicateIcon, cutIcon, pngIcon, svgIcon } from "../components/icons";
+import { DuplicateIcon, cutIcon } from "../components/icons";
 import { StoreAction } from "../store";
 
 export const actionCopy = register({
@@ -115,136 +113,6 @@ export const actionCut = register({
     return actionDeleteSelected.perform(elements, appState, null, app);
   },
   keyTest: (event) => event[KEYS.CTRL_OR_CMD] && event.key === KEYS.X,
-});
-
-export const actionCopyAsSvg = register({
-  name: "copyAsSvg",
-  label: "labels.copyAsSvg",
-  icon: svgIcon,
-  trackEvent: { category: "element" },
-  perform: async (elements, appState, _data, app) => {
-    if (!app.canvas) {
-      return {
-        storeAction: StoreAction.NONE,
-      };
-    }
-
-    const { exportedElements, exportingFrame } = prepareElementsForExport(
-      elements,
-      appState,
-      true,
-    );
-
-    try {
-      await exportCanvas(
-        "clipboard-svg",
-        exportedElements,
-        appState,
-        app.files,
-        {
-          ...appState,
-          exportingFrame,
-          name: app.getName(),
-        },
-      );
-
-      const selectedElements = app.scene.getSelectedElements({
-        selectedElementIds: appState.selectedElementIds,
-        includeBoundTextElement: true,
-        includeElementsInFrames: true,
-      });
-
-      return {
-        appState: {
-          toast: {
-            message: t("toast.copyToClipboardAsSvg", {
-              exportSelection: selectedElements.length
-                ? t("toast.selection")
-                : t("toast.canvas"),
-              exportColorScheme: appState.exportWithDarkMode
-                ? t("buttons.darkMode")
-                : t("buttons.lightMode"),
-            }),
-          },
-        },
-        storeAction: StoreAction.NONE,
-      };
-    } catch (error: any) {
-      console.error(error);
-      return {
-        appState: {
-          errorMessage: error.message,
-        },
-        storeAction: StoreAction.NONE,
-      };
-    }
-  },
-  predicate: (elements) => {
-    return probablySupportsClipboardWriteText && elements.length > 0;
-  },
-  keywords: ["svg", "clipboard", "copy"],
-});
-
-export const actionCopyAsPng = register({
-  name: "copyAsPng",
-  label: "labels.copyAsPng",
-  icon: pngIcon,
-  trackEvent: { category: "element" },
-  perform: async (elements, appState, _data, app) => {
-    if (!app.canvas) {
-      return {
-        storeAction: StoreAction.NONE,
-      };
-    }
-    const selectedElements = app.scene.getSelectedElements({
-      selectedElementIds: appState.selectedElementIds,
-      includeBoundTextElement: true,
-      includeElementsInFrames: true,
-    });
-
-    const { exportedElements, exportingFrame } = prepareElementsForExport(
-      elements,
-      appState,
-      true,
-    );
-    try {
-      await exportCanvas("clipboard", exportedElements, appState, app.files, {
-        ...appState,
-        exportingFrame,
-        name: app.getName(),
-      });
-      return {
-        appState: {
-          ...appState,
-          toast: {
-            message: t("toast.copyToClipboardAsPng", {
-              exportSelection: selectedElements.length
-                ? t("toast.selection")
-                : t("toast.canvas"),
-              exportColorScheme: appState.exportWithDarkMode
-                ? t("buttons.darkMode")
-                : t("buttons.lightMode"),
-            }),
-          },
-        },
-        storeAction: StoreAction.NONE,
-      };
-    } catch (error: any) {
-      console.error(error);
-      return {
-        appState: {
-          ...appState,
-          errorMessage: error.message,
-        },
-        storeAction: StoreAction.NONE,
-      };
-    }
-  },
-  predicate: (elements) => {
-    return probablySupportsClipboardBlob && elements.length > 0;
-  },
-  keyTest: (event) => event.code === CODES.C && event.altKey && event.shiftKey,
-  keywords: ["png", "clipboard", "copy"],
 });
 
 export const copyText = register({
