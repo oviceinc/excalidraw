@@ -70,7 +70,7 @@
     "release:excalidraw": "node scripts/release.js",
     "rm:node_modules": "rm -rf node_modules && rm -rf excalidraw-app/node_modules && rm -rf packages/*/node_modules",
     "clean-install": "yarn rm:node_modules && yarn install",
-    "publish": "yarn workspaces foreach -Rpt --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' npm publish",
+    "publish": "yarn workspaces foreach -A run publish",
     "build": "yarn workspaces foreach -R --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' run build",
     "version-patch": "yarn workspaces foreach -Rpt --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' version patch"
   },
