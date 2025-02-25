@@ -15,7 +15,6 @@ import { EditorJotaiProvider, editorJotaiStore } from "./editor-jotai";
 import Footer from "./components/footer/FooterCenter";
 import MainMenu from "./components/main-menu/MainMenu";
 import WelcomeScreen from "./components/welcome-screen/WelcomeScreen";
-import LiveCollaborationTrigger from "./components/live-collaboration/LiveCollaborationTrigger";
 
 polyfill();
 
@@ -273,7 +272,6 @@ export { Footer };
 export { MainMenu };
 export { useDevice } from "./components/App";
 export { WelcomeScreen };
-export { LiveCollaborationTrigger };
 export { Stats } from "./components/Stats";
 
 export { DefaultSidebar } from "./components/DefaultSidebar";

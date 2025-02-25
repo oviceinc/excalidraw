@@ -9,7 +9,7 @@ function App() {
       {" "}
       <h1 style={{ textAlign: "center" }}>Excalidraw Example</h1>
       <div style={{ height: "800px" }}>
-        <Excalidraw />
+        <Excalidraw isCollaborating />
       </div>
     </>
   );
