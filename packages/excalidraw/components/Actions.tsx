@@ -23,7 +23,6 @@ import { ToolButton } from "./ToolButton";
 import { hasStrokeColor, toolIsArrow } from "../scene/comparisons";
 import { trackEvent } from "../analytics";
 import {
-  hasBoundTextElement,
   isElbowArrow,
   isImageElement,
   isLinearElement,
@@ -39,7 +38,6 @@ import {
 
 import "./Actions.scss";
 import { CLASSES } from "../constants";
-import { alignActionsPredicate } from "../actions/actionAlign";
 import { laserPointerToolIcon } from "./icons";
 
 export const canChangeStrokeColor = (
@@ -89,19 +87,10 @@ export const SelectedShapeActions = ({
 }) => {
   const targetElements = getTargetElements(elementsMap, appState);
 
-  let isSingleElementBoundContainer = false;
-  if (
-    targetElements.length === 2 &&
-    (hasBoundTextElement(targetElements[0]) ||
-      hasBoundTextElement(targetElements[1]))
-  ) {
-    isSingleElementBoundContainer = true;
-  }
   const isEditingTextOrNewElement = Boolean(
     appState.editingTextElement || appState.newElement,
   );
   const device = useDevice();
-  const isRTL = document.documentElement.getAttribute("dir") === "rtl";
 
   const showFillIcons =
     (hasBackground(appState.activeTool.type) &&
@@ -121,9 +110,6 @@ export const SelectedShapeActions = ({
     !appState.croppingElementId &&
     targetElements.length === 1 &&
     isImageElement(targetElements[0]);
-
-  const showAlignActions =
-    !isSingleElementBoundContainer && alignActionsPredicate(appState, app);
 
   return (
     <div className="panelColumn">
@@ -182,58 +168,6 @@ export const SelectedShapeActions = ({
 
       {renderAction("changeOpacity")}
 
-      <fieldset>
-        <legend>{t("labels.layers")}</legend>
-        <div className="buttonList">
-          {renderAction("sendToBack")}
-          {renderAction("sendBackward")}
-          {renderAction("bringForward")}
-          {renderAction("bringToFront")}
-        </div>
-      </fieldset>
-
-      {showAlignActions && !isSingleElementBoundContainer && (
-        <fieldset>
-          <legend>{t("labels.align")}</legend>
-          <div className="buttonList">
-            {
-              // swap this order for RTL so the button positions always match their action
-              // (i.e. the leftmost button aligns left)
-            }
-            {isRTL ? (
-              <>
-                {renderAction("alignRight")}
-                {renderAction("alignHorizontallyCentered")}
-                {renderAction("alignLeft")}
-              </>
-            ) : (
-              <>
-                {renderAction("alignLeft")}
-                {renderAction("alignHorizontallyCentered")}
-                {renderAction("alignRight")}
-              </>
-            )}
-            {targetElements.length > 2 &&
-              renderAction("distributeHorizontally")}
-            {/* breaks the row ˇˇ */}
-            <div style={{ flexBasis: "100%", height: 0 }} />
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: ".5rem",
-                marginTop: "-0.5rem",
-              }}
-            >
-              {renderAction("alignTop")}
-              {renderAction("alignVerticallyCentered")}
-              {renderAction("alignBottom")}
-              {targetElements.length > 2 &&
-                renderAction("distributeVertically")}
-            </div>
-          </div>
-        </fieldset>
-      )}
       {!isEditingTextOrNewElement && targetElements.length > 0 && (
         <fieldset>
           <legend>{t("labels.actions")}</legend>
