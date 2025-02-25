@@ -1,9 +1,9 @@
 import { actionLoadScene, actionShortcuts } from "../../actions";
 import { getShortcutFromShortcutName } from "../../actions/shortcuts";
-import { t, useI18n } from "../../i18n";
+import { t } from "../../i18n";
 import { useDevice, useExcalidrawActionManager } from "../App";
 import { useTunnels } from "../../context/tunnels";
-import { HelpIcon, LoadIcon, usersIcon } from "../icons";
+import { HelpIcon, LoadIcon } from "../icons";
 import { useUIAppState } from "../../context/ui-appState";
 import { ExcalidrawLogo } from "../ExcalidrawLogo";
 
@@ -165,21 +165,6 @@ const MenuItemLoadScene = () => {
 };
 MenuItemLoadScene.displayName = "MenuItemLoadScene";
 
-const MenuItemLiveCollaborationTrigger = ({
-  onSelect,
-}: {
-  onSelect: () => any;
-}) => {
-  const { t } = useI18n();
-  return (
-    <WelcomeScreenMenuItem shortcut={null} onSelect={onSelect} icon={usersIcon}>
-      {t("labels.liveCollaboration")}
-    </WelcomeScreenMenuItem>
-  );
-};
-MenuItemLiveCollaborationTrigger.displayName =
-  "MenuItemLiveCollaborationTrigger";
-
 // -----------------------------------------------------------------------------
 
 Center.Logo = Logo;
@@ -189,6 +174,5 @@ Center.MenuItem = WelcomeScreenMenuItem;
 Center.MenuItemLink = WelcomeScreenMenuItemLink;
 Center.MenuItemHelp = MenuItemHelp;
 Center.MenuItemLoadScene = MenuItemLoadScene;
-Center.MenuItemLiveCollaborationTrigger = MenuItemLiveCollaborationTrigger;
 
 export { Center };
