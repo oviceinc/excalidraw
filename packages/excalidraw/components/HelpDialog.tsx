@@ -4,7 +4,7 @@ import { KEYS } from "../keys";
 import { Dialog } from "./Dialog";
 import { getShortcutKey } from "../utils";
 import "./HelpDialog.scss";
-import { isDarwin, isFirefox, isWindows } from "../constants";
+import { isFirefox, isWindows } from "../constants";
 import { getShortcutFromShortcutName } from "../actions/shortcuts";
 
 const Section = (props: { title: string; children: React.ReactNode }) => (
@@ -332,46 +332,6 @@ export const HelpDialog = ({ onClose }: { onClose?: () => void }) => {
             <Shortcut
               label={t("labels.pasteStyles")}
               shortcuts={[getShortcutKey("CtrlOrCmd+Alt+V")]}
-            />
-            <Shortcut
-              label={t("labels.sendToBack")}
-              shortcuts={[
-                isDarwin
-                  ? getShortcutKey("CtrlOrCmd+Alt+[")
-                  : getShortcutKey("CtrlOrCmd+Shift+["),
-              ]}
-            />
-            <Shortcut
-              label={t("labels.bringToFront")}
-              shortcuts={[
-                isDarwin
-                  ? getShortcutKey("CtrlOrCmd+Alt+]")
-                  : getShortcutKey("CtrlOrCmd+Shift+]"),
-              ]}
-            />
-            <Shortcut
-              label={t("labels.sendBackward")}
-              shortcuts={[getShortcutKey("CtrlOrCmd+[")]}
-            />
-            <Shortcut
-              label={t("labels.bringForward")}
-              shortcuts={[getShortcutKey("CtrlOrCmd+]")]}
-            />
-            <Shortcut
-              label={t("labels.alignTop")}
-              shortcuts={[getShortcutKey("CtrlOrCmd+Shift+Up")]}
-            />
-            <Shortcut
-              label={t("labels.alignBottom")}
-              shortcuts={[getShortcutKey("CtrlOrCmd+Shift+Down")]}
-            />
-            <Shortcut
-              label={t("labels.alignLeft")}
-              shortcuts={[getShortcutKey("CtrlOrCmd+Shift+Left")]}
-            />
-            <Shortcut
-              label={t("labels.alignRight")}
-              shortcuts={[getShortcutKey("CtrlOrCmd+Shift+Right")]}
             />
             <Shortcut
               label={t("labels.duplicateSelection")}

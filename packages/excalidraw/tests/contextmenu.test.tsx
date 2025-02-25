@@ -122,10 +122,6 @@ describe("contextMenu element", () => {
       "deleteSelectedElements",
       "flipHorizontal",
       "flipVertical",
-      "sendBackward",
-      "bringForward",
-      "sendToBack",
-      "bringToFront",
       "duplicateSelection",
       "toggleElementLock",
     ];
@@ -213,10 +209,6 @@ describe("contextMenu element", () => {
       "group",
       "flipHorizontal",
       "flipVertical",
-      "sendBackward",
-      "bringForward",
-      "sendToBack",
-      "bringToFront",
       "duplicateSelection",
       "toggleElementLock",
     ];
@@ -268,10 +260,6 @@ describe("contextMenu element", () => {
       "ungroup",
       "flipHorizontal",
       "flipVertical",
-      "sendBackward",
-      "bringForward",
-      "sendToBack",
-      "bringToFront",
       "duplicateSelection",
       "toggleElementLock",
     ];
@@ -420,92 +408,6 @@ describe("contextMenu element", () => {
       ...rect2
     } = h.elements[1];
     expect(rect1).toEqual(rect2);
-  });
-
-  it("selecting 'Send backward' in context menu sends element backward", () => {
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    mouse.reset();
-    fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
-      button: 2,
-      clientX: 40,
-      clientY: 40,
-    });
-    const contextMenu = UI.queryContextMenu();
-    const elementsBefore = h.elements;
-    fireEvent.click(queryByText(contextMenu!, "Send backward")!);
-    expect(elementsBefore[0].id).toEqual(h.elements[1].id);
-    expect(elementsBefore[1].id).toEqual(h.elements[0].id);
-  });
-
-  it("selecting 'Bring forward' in context menu brings element forward", () => {
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    mouse.reset();
-    fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
-      button: 2,
-      clientX: 10,
-      clientY: 10,
-    });
-    const contextMenu = UI.queryContextMenu();
-    const elementsBefore = h.elements;
-    fireEvent.click(queryByText(contextMenu!, "Bring forward")!);
-    expect(elementsBefore[0].id).toEqual(h.elements[1].id);
-    expect(elementsBefore[1].id).toEqual(h.elements[0].id);
-  });
-
-  it("selecting 'Send to back' in context menu sends element to back", () => {
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    mouse.reset();
-    fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
-      button: 2,
-      clientX: 40,
-      clientY: 40,
-    });
-    const contextMenu = UI.queryContextMenu();
-    const elementsBefore = h.elements;
-    fireEvent.click(queryByText(contextMenu!, "Send to back")!);
-    expect(elementsBefore[1].id).toEqual(h.elements[0].id);
-  });
-
-  it("selecting 'Bring to front' in context menu brings element to front", () => {
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    UI.clickTool("rectangle");
-    mouse.down(10, 10);
-    mouse.up(20, 20);
-
-    mouse.reset();
-    fireEvent.contextMenu(GlobalTestState.interactiveCanvas, {
-      button: 2,
-      clientX: 10,
-      clientY: 10,
-    });
-    const contextMenu = UI.queryContextMenu();
-    const elementsBefore = h.elements;
-    fireEvent.click(queryByText(contextMenu!, "Bring to front")!);
-    expect(elementsBefore[0].id).toEqual(h.elements[1].id);
   });
 
   it("selecting 'Group selection' in context menu groups selected elements", () => {

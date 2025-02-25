@@ -6,8 +6,6 @@ import rough from "roughjs/bin/rough";
 import clsx from "clsx";
 import { nanoid } from "nanoid";
 import {
-  actionBringForward,
-  actionBringToFront,
   actionCopy,
   copyText,
   actionCopyStyles,
@@ -20,8 +18,6 @@ import {
   actionGroup,
   actionPasteStyles,
   actionSelectAll,
-  actionSendBackward,
-  actionSendToBack,
   actionToggleGridMode,
   actionToggleZenMode,
   actionUnbindText,
@@ -10764,10 +10760,6 @@ class App extends React.Component<AppProps, AppState> {
       actionUngroup,
       CONTEXT_MENU_SEPARATOR,
       CONTEXT_MENU_SEPARATOR,
-      actionSendBackward,
-      actionBringForward,
-      actionSendToBack,
-      actionBringToFront,
       CONTEXT_MENU_SEPARATOR,
       actionFlipHorizontal,
       actionFlipVertical,
