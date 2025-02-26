@@ -6,11 +6,7 @@ import libAssetsPlugin from "@laynezh/vite-plugin-lib-assets";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [
-    libAssetsPlugin({
-      /* options */
-    }),
-  ],
+  plugins: [libAssetsPlugin()],
   build: {
     assetsInlineLimit: 1024,
     lib: {

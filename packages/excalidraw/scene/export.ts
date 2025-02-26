@@ -411,17 +411,8 @@ export const exportToSvg = async (
   // inline font faces
   // ---------------------------------------------------------------------------
 
-  const fontFaces = !opts?.skipInliningFonts
-    ? await Fonts.generateFontFaceDeclarations(elements)
-    : [];
-
-  const delimiter = "\n      "; // 6 spaces
-
   const style = svgRoot.ownerDocument.createElementNS(SVG_NS, "style");
   style.classList.add("style-fonts");
-  style.appendChild(
-    document.createTextNode(`${delimiter}${fontFaces.join(delimiter)}`),
-  );
 
   defsElement.appendChild(style);
 
