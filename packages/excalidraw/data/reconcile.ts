@@ -1,4 +1,4 @@
-import throttle from "lodash.throttle";
+import throttle from "lodash/throttle";
 import { ENV } from "../constants";
 import type { OrderedExcalidrawElement } from "../element/types";
 import {
