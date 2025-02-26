@@ -19,7 +19,22 @@ export default defineConfig({
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ["react", "react-dom", "react/jsx-runtime"],
+      external: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "lodash",
+        "@floating-ui",
+        "@radix-ui",
+        "pako",
+      ],
+      output: {
+        preserveModules: true,
+        preserveModulesRoot: ".",
+        entryFileNames: ({ name: fileName }) => {
+          return `${fileName}.js`;
+        },
+      }
     },
   },
 });

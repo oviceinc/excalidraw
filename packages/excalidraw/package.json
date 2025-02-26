@@ -7,12 +7,13 @@
   "exports": {
     ".": {
       "types": "./dist/excalidraw/index.d.ts",
-      "default": "./dist/excalidraw.js"
+      "default": "./dist/index.js"
     },
     "./index.css": {
       "default": "./dist/style.css"
     }
   },
+  "sideEffects": false,
   "types": "./dist/excalidraw/index.d.ts",
   "files": [
     "dist/*"
