@@ -313,7 +313,7 @@ import {
   normalizeSVG,
   updateImageCache as _updateImageCache,
 } from "../element/image";
-import throttle from "lodash.throttle";
+import throttle from "lodash/throttle";
 import type { FileSystemHandle } from "../data/filesystem";
 import { fileOpen } from "../data/filesystem";
 import {
