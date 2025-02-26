@@ -275,8 +275,6 @@ export { WelcomeScreen };
 export { Stats } from "./components/Stats";
 
 export { DefaultSidebar } from "./components/DefaultSidebar";
-export { TTDDialog } from "./components/TTDDialog/TTDDialog";
-export { TTDDialogTrigger } from "./components/TTDDialog/TTDDialogTrigger";
 
 export { normalizeLink } from "./data/url";
 export { zoomToFitBounds } from "./actions/actionCanvas";

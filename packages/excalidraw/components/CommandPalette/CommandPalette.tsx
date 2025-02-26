@@ -24,8 +24,6 @@ import {
   boltIcon,
   bucketFillIcon,
   ExportImageIcon,
-  mermaidLogoIcon,
-  brainIconThin,
   LibraryIcon,
 } from "../icons";
 import fuzzy from "fuzzy";
@@ -491,38 +489,6 @@ function CommandPaletteInner({
           viewMode: false,
           perform: () => {
             app.toggleLock();
-          },
-        },
-        {
-          label: `${t("labels.textToDiagram")}...`,
-          category: DEFAULT_CATEGORIES.tools,
-          icon: brainIconThin,
-          viewMode: false,
-          predicate: appProps.aiEnabled,
-          perform: () => {
-            setAppState((state) => ({
-              ...state,
-              openDialog: {
-                name: "ttd",
-                tab: "text-to-diagram",
-              },
-            }));
-          },
-        },
-        {
-          label: `${t("toolBar.mermaidToExcalidraw")}...`,
-          category: DEFAULT_CATEGORIES.tools,
-          icon: mermaidLogoIcon,
-          viewMode: false,
-          predicate: appProps.aiEnabled,
-          perform: () => {
-            setAppState((state) => ({
-              ...state,
-              openDialog: {
-                name: "ttd",
-                tab: "mermaid",
-              },
-            }));
           },
         },
         // {
