@@ -34,7 +34,7 @@ export default defineConfig({
         entryFileNames: ({ name: fileName }) => {
           return `${fileName}.js`;
         },
-      }
+      },
     },
   },
 });
