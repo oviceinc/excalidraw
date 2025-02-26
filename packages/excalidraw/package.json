@@ -1,18 +1,19 @@
 {
   "name": "@oviceinc/excalidraw",
-  "version": "0.17.15",
+  "version": "0.17.16",
   "main": "./dist/excalidraw.js",
   "type": "module",
   "module": "./dist/excalidraw.js",
   "exports": {
     ".": {
       "types": "./dist/excalidraw/index.d.ts",
-      "default": "./dist/excalidraw.js"
+      "default": "./dist/index.js"
     },
     "./index.css": {
       "default": "./dist/style.css"
     }
   },
+  "sideEffects": false,
   "types": "./dist/excalidraw/index.d.ts",
   "files": [
     "dist/*"
