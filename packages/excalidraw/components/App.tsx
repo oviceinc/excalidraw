@@ -415,7 +415,6 @@ import {
 import { getShortcutFromShortcutName } from "../actions/shortcuts";
 import { actionTextAutoResize } from "../actions/actionTextAutoResize";
 import { getVisibleSceneBounds } from "../element/bounds";
-import { isMaybeMermaidDefinition } from "../mermaid";
 import NewElementCanvas from "./canvases/NewElementCanvas";
 import {
   FlowChartCreator,
@@ -3078,31 +3077,6 @@ class App extends React.Component<AppProps, AppState> {
           retainSeed: isPlainPaste,
         });
       } else if (data.text) {
-        if (data.text && isMaybeMermaidDefinition(data.text)) {
-          const api = await import("@excalidraw/mermaid-to-excalidraw");
-
-          try {
-            const { elements: skeletonElements, files } =
-              await api.parseMermaidToExcalidraw(data.text);
-
-            const elements = convertToExcalidrawElements(skeletonElements, {
-              regenerateIds: true,
-            });
-
-            this.addElementsFromPasteOrLibrary({
-              elements,
-              files,
-              position: "cursor",
-            });
-
-            return;
-          } catch (err: any) {
-            console.warn(
-              `parsing pasted text as mermaid definition failed: ${err.message}`,
-            );
-          }
-        }
-
         const nonEmptyLines = normalizeEOL(data.text)
           .split(/\n+/)
           .map((s) => s.trim())
