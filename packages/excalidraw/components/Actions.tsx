@@ -38,6 +38,7 @@ import {
 
 import "./Actions.scss";
 import { CLASSES } from "../constants";
+import { laserPointerToolIcon } from "./icons";
 
 export const canChangeStrokeColor = (
   appState: UIAppState,
@@ -55,7 +56,6 @@ export const canChangeStrokeColor = (
 
   return (
     (hasStrokeColor(appState.activeTool.type) &&
-      appState.activeTool.type !== "image" &&
       commonSelectedType !== "image" &&
       commonSelectedType !== "frame" &&
       commonSelectedType !== "magicframe") ||
@@ -195,6 +195,46 @@ export const ShapesSwitcher = ({
   app: AppClassProperties;
   UIOptions: AppProps["UIOptions"];
 }) => {
+  const renderLserToolButton = () => {
+    const fillable = false;
+    const icon = laserPointerToolIcon;
+    const value = "laser";
+    const key = "k";
+    const numericKey = undefined;
+
+    const label = t(`toolBar.${value}`);
+    const letter =
+      key && capitalizeString(typeof key === "string" ? key : key[0]);
+    const shortcut = letter
+      ? `${letter} ${t("helpDialog.or")} ${numericKey}`
+      : `${numericKey}`;
+    return (
+      <ToolButton
+        className={clsx("Shape", { fillable })}
+        key={value}
+        type="radio"
+        icon={icon}
+        checked={activeTool.type === value}
+        name="editor-current-shape"
+        title={`${capitalizeString(label)} — ${shortcut}`}
+        keyBindingLabel={numericKey || letter}
+        aria-label={capitalizeString(label)}
+        aria-keyshortcuts={shortcut}
+        data-testid={`toolbar-${value}`}
+        onPointerDown={({ pointerType }) => {
+          if (!appState.penDetected && pointerType === "pen") {
+            app.togglePenMode(true);
+          }
+        }}
+        onChange={({ pointerType }) => {
+          if (appState.activeTool.type !== value) {
+            trackEvent("toolbar", value, "ui");
+          }
+          app.setActiveTool({ type: value });
+        }}
+      />
+    );
+  };
   return (
     <>
       {SHAPES.map(({ value, icon, key, numericKey, fillable }, index) => {
@@ -246,6 +286,7 @@ export const ShapesSwitcher = ({
           />
         );
       })}
+      {renderLserToolButton()}
     </>
   );
 };
