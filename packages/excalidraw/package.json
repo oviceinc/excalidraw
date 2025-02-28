@@ -1,6 +1,6 @@
 {
   "name": "@oviceinc/excalidraw",
-  "version": "0.17.18",
+  "version": "0.17.19",
   "main": "./dist/excalidraw.js",
   "type": "module",
   "module": "./dist/excalidraw.js",
@@ -52,8 +52,8 @@
     ]
   },
   "peerDependencies": {
-    "react": "^17.0.2 || ^18.2.0",
-    "react-dom": "^17.0.2 || ^18.2.0"
+    "react": "^17.0.2 || ^18.2.0|| ^19.0.0",
+    "react-dom": "^17.0.2 || ^18.2.0|| ^19.0.0"
   },
   "dependencies": {
     "@braintree/sanitize-url": "6.0.2",
