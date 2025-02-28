@@ -65,54 +65,78 @@ export class ExcalidrawBinding {
     this.#api = api;
     this.awareness = awareness;
 
+    let init = false;
+
+    const setInitialElements = () => {
+      // Initialize elements and assets from Y.js state
+      const initialValue = this.#yElements.yarray
+        .map(({ val }) => ({ ...val }))
+        .filter(isValidElement);
+
+      this.lastVersion = hashElementsVersion(initialValue);
+      this.#api.updateScene({ elements: initialValue, storeAction: "update" });
+    };
+
     // Listen for local changes in Excalidraw and sync to Y.js
     this.subscriptions.push(
-      this.#api.onChange((elements, state, files) => {
-        const version = hashElementsVersion(elements);
-        if (version !== this.lastVersion) {
-          this.#yElements.doc?.transact(() => {
-            // check deletion
-            for (const yElem of this.#yElements.yarray) {
-              const deleted =
-                elements.find((element) => element.id === yElem.key)
-                  ?.isDeleted ?? true;
-              if (deleted) {
-                this.#yElements.delete(yElem.key);
-              }
-            }
-            for (const element of elements) {
-              const remoteElements = this.#yElements.get(element.id);
-              if (
-                remoteElements?.versionNonce !== element.versionNonce ||
-                remoteElements?.version !== element.version
-              ) {
-                this.#yElements.set(element.id, { ...element });
-              }
-            }
-          }, this);
-          this.lastVersion = version;
-        }
-        if (files) {
-          const newFiles = Object.entries(files).filter(([id, file]) => {
-            return this.#yAssets.get(id) == null;
-          });
+      this.#api.onChange(
+        throttle((elements, state, files) => {
+          if (state.isLoading) {
+            return;
+          }
+          if (!init) {
+            setInitialElements();
+            init = true;
+            return;
+          }
 
-          this.#yAssets.doc?.transact(() => {
-            for (const [id, file] of newFiles) {
-              this.#yAssets.set(id, { ...file });
-            }
-          }, this);
-        }
+          const version = hashElementsVersion(elements);
+          if (version !== this.lastVersion) {
+            this.#yElements.doc?.transact(() => {
+              // check deletion
+              for (const yElem of this.#yElements.yarray) {
+                const deleted =
+                  elements.find((element) => element.id === yElem.key)
+                    ?.isDeleted ?? true;
+                if (deleted) {
+                  this.#yElements.delete(yElem.key);
+                }
+              }
+              for (const element of elements) {
+                const remoteElements = this.#yElements.get(element.id);
+                if (
+                  remoteElements?.versionNonce !== element.versionNonce ||
+                  remoteElements?.version !== element.version
+                ) {
+                  this.#yElements.set(element.id, { ...element });
+                }
+              }
+            }, this);
+            this.lastVersion = version;
+          }
+          if (files) {
+            const newFiles = Object.entries(files).filter(([id, file]) => {
+              return this.#yAssets.get(id) == null;
+            });
 
-        if (this.awareness) {
-          // update selected awareness
-          this.awareness.setLocalStateField(
-            "selectedElementIds",
-            state.selectedElementIds,
-          );
-        }
-      }),
+            this.#yAssets.doc?.transact(() => {
+              for (const [id, file] of newFiles) {
+                this.#yAssets.set(id, { ...file });
+              }
+            }, this);
+          }
+
+          if (this.awareness) {
+            // update selected awareness
+            this.updateLocalState({
+              selectedElementIds: state.selectedElementIds,
+            });
+          }
+        }, 50),
+      ),
     );
+
+    setInitialElements();
 
     // Listen for remote changes in Y.js elements and sync to Excalidraw
     const _remoteElementsChangeHandler = (
@@ -219,8 +243,7 @@ export class ExcalidrawBinding {
 
       // Initialize collaborator state
       const collaborators = new Map();
-      for (const id of awareness.getStates().keys()) {
-        const state = awareness.getStates().get(id);
+      for (const [id, state] of awareness.getStates().entries()) {
         if (state) {
           collaborators.set(id.toString(), {
             pointer: state.pointer,
@@ -237,14 +260,6 @@ export class ExcalidrawBinding {
       this.collaborators = collaborators;
     }
 
-    // Initialize elements and assets from Y.js state
-    const initialValue = this.#yElements.yarray
-      .map(({ val }) => ({ ...val }))
-      .filter(isValidElement);
-
-    this.lastVersion = hashElementsVersion(initialValue);
-    this.#api.updateScene({ elements: initialValue, storeAction: "update" });
-
     // init assets
     const initialAssets = this.#yAssets.yarray.map(({ val }) => val);
 
@@ -253,6 +268,15 @@ export class ExcalidrawBinding {
     }
     this.#api.addFiles(initialAssets);
   }
+
+  public updateLocalState = throttle((state: { [x: string]: unknown }) => {
+    if (this.awareness) {
+      this.awareness.setLocalState({
+        ...this.awareness.getLocalState(),
+        ...state,
+      });
+    }
+  }, 50);
 
   /**
    * Updates pointer position and button state for collaboration
@@ -266,10 +290,10 @@ export class ExcalidrawBinding {
     };
     button: "down" | "up";
   }) => {
-    if (this.awareness) {
-      this.awareness.setLocalStateField("pointer", payload.pointer);
-      this.awareness.setLocalStateField("button", payload.button);
-    }
+    this.updateLocalState({
+      pointer: payload.pointer,
+      button: payload.button,
+    });
   };
 
   /**
@@ -280,4 +304,30 @@ export class ExcalidrawBinding {
       s();
     }
   }
+}
+
+// biome-ignore lint/suspicious/noExplicitAny: any is used to avoid type errors
+function throttle<T extends (...args: any[]) => void>(
+  func: T,
+  limit: number,
+): T {
+  let lastFunc: ReturnType<typeof setTimeout> | null = null;
+  let lastRan: number | null = null;
+
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
+    if (lastRan === null) {
+      func.apply(this, args);
+      lastRan = Date.now();
+    } else {
+      if (lastFunc) {
+        clearTimeout(lastFunc);
+      }
+      lastFunc = setTimeout(() => {
+        if (Date.now() - (lastRan as number) >= limit) {
+          func.apply(this, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  } as T;
 }

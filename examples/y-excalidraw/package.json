@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "yjs-socket-server": "HOST=localhost PORT=1234 npx y-websocket"
   },
   "dependencies": {
     "@oviceinc/excalidraw": "workspace:^",
@@ -16,6 +17,7 @@
     "react-dom": "^18.0.0",
     "y-indexeddb": "^9.0.12",
     "y-protocols": "1.0.6",
+    "y-websocket": "^2.1.0",
     "yjs": "^13.6.23"
   },
   "devDependencies": {
