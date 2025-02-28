@@ -18,22 +18,10 @@ const provicer = new WebsocketProvider(
 const awareness = provicer.awareness;
 new IndexeddbPersistence("excalidraw", ydoc);
 
-const usercolors = [
-  "#30bced",
-  "#6eeb83",
-  "#ffbc42",
-  "#ecd444",
-  "#ee6352",
-  "#9ac2c9",
-  "#8acb88",
-  "#1be7ff",
-];
-const myColor = usercolors[Math.floor(Math.random() * usercolors.length)];
-
 awareness.setLocalStateField("user", {
   name: `user${Math.random().toString(36).substr(2, 5)}`,
-  color: myColor,
 });
+
 function App() {
   const [api, setApi] = useState<ExcalidrawImperativeAPI | null>(null);
   const [binding, setBinding] = useState<ExcalidrawBinding | null>(null);
@@ -48,6 +36,9 @@ function App() {
       ydoc.getArray("assets"),
       api,
       awareness,
+      {
+        cursorDisplayTimeout: 2000,
+      },
     );
     setBinding(binding);
     return () => {
