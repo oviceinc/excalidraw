@@ -136,13 +136,6 @@ export class ExcalidrawBinding {
               }
             }, this);
           }
-
-          if (this.awareness) {
-            // update selected awareness
-            this.updateLocalState({
-              selectedElementIds: state.selectedElementIds,
-            });
-          }
         }, 50),
       ),
     );
@@ -331,9 +324,8 @@ export class ExcalidrawBinding {
     this.updateLocalState({
       pointer: payload.pointer,
       button: payload.button,
+      selectedElementIds: this.#api.getAppState().selectedElementIds,
     });
-
-    // Removed call here (now handled periodically by interval timer)
   };
 
   /**
