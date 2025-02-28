@@ -17,6 +17,7 @@ type UpdateSceneParam = Parameters<ExcalidrawImperativeAPI["updateScene"]>[0];
 type ExcalidrawElement = NonNullable<UpdateSceneParam["elements"]>[0];
 type Collaborators = NonNullable<UpdateSceneParam["collaborators"]>;
 type SocketId = Collaborators extends Map<infer K, unknown> ? K : never;
+type Collaborator = Collaborators extends Map<unknown, infer V> ? V : never;
 type BinaryFileData = Parameters<ExcalidrawImperativeAPI["addFiles"]>[0][0];
 
 export type ExcalidrawBindingElementsStore = Y.Array<{
@@ -32,6 +33,10 @@ const isValidElement = (element: ExcalidrawElement) => {
   return element.id != null;
 };
 
+type Option = {
+  cursorDisplayTimeout?: number;
+};
+
 /**
  * Manages the binding between Excalidraw and Y.js for collaborative drawing
  * Handles synchronization of elements, assets, and user awareness
@@ -41,6 +46,10 @@ export class ExcalidrawBinding {
   #yAssets: YKeyValue<BinaryFileData>;
   #api: ExcalidrawImperativeAPI;
   awareness?: awarenessProtocol.Awareness;
+  cursorDisplayTimeout?: number; // milliseconds
+  cursorDisplayTimeoutTimer: ReturnType<typeof setInterval> | undefined; // Changed from setTimeout to setInterval
+  // Record last update time for each collaborator
+  #lastPointerUpdateTime: Map<SocketId, number> = new Map();
 
   subscriptions: (() => void)[] = [];
   collaborators: Collaborators = new Map();
@@ -59,11 +68,13 @@ export class ExcalidrawBinding {
     yAssets: ExcalidrawBindingAssetsStore,
     api: ExcalidrawImperativeAPI,
     awareness?: awarenessProtocol.Awareness,
+    option?: Option,
   ) {
     this.#yElements = new YKeyValue(yElements);
     this.#yAssets = new YKeyValue(yAssets);
     this.#api = api;
     this.awareness = awareness;
+    this.cursorDisplayTimeout = option?.cursorDisplayTimeout;
 
     let init = false;
 
@@ -199,6 +210,22 @@ export class ExcalidrawBinding {
     });
 
     if (awareness) {
+      const toCollaborator = (state: {
+        // biome-ignore lint/suspicious/noExplicitAny: TODO
+        [x: string]: any;
+      }): Collaborator => {
+        return {
+          pointer: state.pointer,
+          button: state.button,
+          selectedElementIds: state.selectedElementIds,
+          username: state.user?.name,
+          avatarUrl: state.user?.avatarUrl,
+          userState: state.user?.state,
+          isSpeaking: state.user?.isSpeaking,
+          isMuted: state.user?.isMuted,
+          isInCall: state.user?.isInCall,
+        };
+      };
       // Handle remote user presence updates
       const _remoteAwarenessChangeHandler = ({
         added,
@@ -219,18 +246,27 @@ export class ExcalidrawBinding {
             continue;
           }
 
-          collaborators.set(id.toString() as SocketId, {
-            pointer: state.pointer,
-            button: state.button,
-            selectedElementIds: state.selectedElementIds,
-            username: state.user?.name,
-            color: state.user?.color,
-            avatarUrl: state.user?.avatarUrl,
-            userState: state.user?.state,
-          });
+          const socketId = id.toString() as SocketId;
+          const newCollaborator = toCollaborator(state);
+          const existingCollaborator = collaborators.get(socketId);
+
+          // Only record last update time when pointer is updated
+          if (
+            newCollaborator.pointer &&
+            (!existingCollaborator?.pointer ||
+              JSON.stringify(existingCollaborator.pointer) !==
+                JSON.stringify(newCollaborator.pointer))
+          ) {
+            this.#lastPointerUpdateTime.set(socketId, Date.now());
+          }
+
+          collaborators.set(socketId, newCollaborator);
         }
         for (const id of removed) {
-          collaborators.delete(id.toString() as SocketId);
+          const socketId = id.toString() as SocketId;
+          collaborators.delete(socketId);
+          // Remove tracking for deleted collaborators
+          this.#lastPointerUpdateTime.delete(socketId);
         }
         collaborators.delete(awareness.clientID.toString() as SocketId);
         this.#api.updateScene({ collaborators });
@@ -242,22 +278,24 @@ export class ExcalidrawBinding {
       });
 
       // Initialize collaborator state
-      const collaborators = new Map();
+      const collaborators: Collaborators = new Map();
       for (const [id, state] of awareness.getStates().entries()) {
         if (state) {
-          collaborators.set(id.toString(), {
-            pointer: state.pointer,
-            button: state.button,
-            selectedElementIds: state.selectedElementIds,
-            username: state.user?.name,
-            color: state.user?.color,
-            avatarUrl: state.user?.avatarUrl,
-            userState: state.user?.state,
-          });
+          const socketId = id.toString() as SocketId;
+          const collaborator = toCollaborator(state);
+          collaborators.set(socketId, collaborator);
+
+          // During initialization, record last update time only if pointer exists
+          if (collaborator.pointer) {
+            this.#lastPointerUpdateTime.set(socketId, Date.now());
+          }
         }
       }
       this.#api.updateScene({ collaborators });
       this.collaborators = collaborators;
+
+      // Set up timeout monitoring during initialization
+      this.startCursorTimeoutChecker();
     }
 
     // init assets
@@ -294,7 +332,67 @@ export class ExcalidrawBinding {
       pointer: payload.pointer,
       button: payload.button,
     });
+
+    // Removed call here (now handled periodically by interval timer)
   };
+
+  /**
+   * Start monitoring pointer timeouts
+   * Using interval timer to ensure regular checks
+   */
+  private startCursorTimeoutChecker() {
+    if (!this.cursorDisplayTimeout) {
+      return;
+    }
+
+    // Clear existing timer
+    if (this.cursorDisplayTimeoutTimer) {
+      clearInterval(this.cursorDisplayTimeoutTimer);
+    }
+
+    // Check periodically using interval timer
+    this.cursorDisplayTimeoutTimer = setInterval(() => {
+      this.checkCursorTimeouts();
+    }, 200);
+  }
+
+  /**
+   * Check and hide timed-out pointers
+   */
+  private checkCursorTimeouts() {
+    if (!this.cursorDisplayTimeout) {
+      return;
+    }
+
+    const now = Date.now();
+    const updatedCollaborators = new Map(this.collaborators);
+    let hasChanges = false;
+
+    // Check each collaborator's pointer
+    updatedCollaborators.forEach((collaborator, id) => {
+      const lastUpdateTime = this.#lastPointerUpdateTime.get(id);
+
+      // If pointer exists and hasn't been updated within timeout period
+      if (
+        collaborator.pointer &&
+        lastUpdateTime &&
+        now - lastUpdateTime > this.cursorDisplayTimeout!
+      ) {
+        hasChanges = true;
+        updatedCollaborators.set(id, {
+          ...collaborator,
+          pointer: undefined,
+        });
+        // Remove the last update time after timeout
+        this.#lastPointerUpdateTime.delete(id);
+      }
+    });
+
+    if (hasChanges) {
+      this.#api.updateScene({ collaborators: updatedCollaborators });
+      this.collaborators = updatedCollaborators;
+    }
+  }
 
   /**
    * Cleanup method to remove all event listeners
@@ -302,6 +400,11 @@ export class ExcalidrawBinding {
   destroy() {
     for (const s of this.subscriptions) {
       s();
+    }
+
+    // Clear timer
+    if (this.cursorDisplayTimeoutTimer) {
+      clearInterval(this.cursorDisplayTimeoutTimer); // Changed from clearTimeout to clearInterval
     }
   }
 }
