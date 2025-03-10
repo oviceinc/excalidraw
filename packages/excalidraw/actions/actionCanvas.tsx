@@ -53,6 +53,9 @@ export const actionClearCanvas = register({
   },
   perform: (elements, appState, _, app) => {
     app.imageCache.clear();
+
+    const keepZoom = app.props.keepZoomWhenResetCanvas;
+
     return {
       elements: elements.map((element) =>
         newElementWith(element, { isDeleted: true }),
@@ -74,6 +77,7 @@ export const actionClearCanvas = register({
           appState.activeTool.type === "image"
             ? { ...appState.activeTool, type: "selection" }
             : appState.activeTool,
+        ...(keepZoom ? { zoom: appState.zoom } : {}),
       },
       storeAction: StoreAction.CAPTURE,
     };
