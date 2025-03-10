@@ -9,7 +9,12 @@ function App() {
       {" "}
       <h1 style={{ textAlign: "center" }}>Excalidraw Example</h1>
       <div style={{ height: "800px" }}>
-        <Excalidraw isCollaborating />
+        <Excalidraw
+          isCollaborating
+          keepZoomWhenResetCanvas
+          handleGestureGlobally={false}
+          handleKeyboardGlobally={false}
+        />
       </div>
     </>
   );

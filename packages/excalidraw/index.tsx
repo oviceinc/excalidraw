@@ -52,6 +52,7 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
     renderEmbeddable,
     aiEnabled,
     showDeprecatedFonts,
+    keepZoomWhenResetCanvas,
   } = props;
 
   const canvasActions = props.UIOptions?.canvasActions;
@@ -143,6 +144,7 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
           renderEmbeddable={renderEmbeddable}
           aiEnabled={aiEnabled !== false}
           showDeprecatedFonts={showDeprecatedFonts}
+          keepZoomWhenResetCanvas={keepZoomWhenResetCanvas}
         >
           {children}
         </App>
