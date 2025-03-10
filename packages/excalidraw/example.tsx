@@ -11,7 +11,7 @@ function App() {
       <div style={{ height: "800px" }}>
         <Excalidraw
           isCollaborating
-          keepZoomWhenResetCanvas
+          keepPositionWhenResetCanvas
           handleGestureGlobally={false}
           handleKeyboardGlobally={false}
         />
