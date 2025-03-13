@@ -34,7 +34,7 @@ import {
   getShortcutKey,
   isWritableElement,
 } from "../../utils";
-import { atom, useAtom, editorJotaiStore } from "../../editor-jotai";
+import { atom, useAtom } from "../../editor-jotai";
 import { deburr } from "../../deburr";
 import type { MarkRequired } from "../../utility-types";
 import { InlineIcon } from "../InlineIcon";
@@ -332,7 +332,10 @@ function CommandPaletteInner({
           keywords: ["delete", "destroy"],
           viewMode: false,
           perform: () => {
-            editorJotaiStore.set(activeConfirmDialogAtom, "clearCanvas");
+            app.props.editorJotaiStore.set(
+              activeConfirmDialogAtom,
+              "clearCanvas",
+            );
           },
         },
         {

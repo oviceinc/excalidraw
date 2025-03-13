@@ -355,7 +355,6 @@ import {
 } from "../scene/selection";
 import { actionPaste } from "../actions/actionClipboard";
 import { actionToggleHandTool, zoomToFit } from "../actions/actionCanvas";
-import { editorJotaiStore } from "../editor-jotai";
 import { activeConfirmDialogAtom } from "./ActiveConfirmDialog";
 import { ImageSceneDataError } from "../errors";
 import {
@@ -2057,7 +2056,7 @@ class App extends React.Component<AppProps, AppState> {
   };
 
   private openEyeDropper = ({ type }: { type: "stroke" | "background" }) => {
-    editorJotaiStore.set(activeEyeDropperAtom, {
+    this.props.editorJotaiStore.set(activeEyeDropperAtom, {
       swapPreviewOnAlt: true,
       colorPickerType:
         type === "stroke" ? "elementStroke" : "elementBackground",
@@ -3248,7 +3247,7 @@ class App extends React.Component<AppProps, AppState> {
         openSidebar:
           this.state.openSidebar &&
           this.device.editor.canFitSidebar &&
-          editorJotaiStore.get(isSidebarDockedAtom)
+          this.props.editorJotaiStore.get(isSidebarDockedAtom)
             ? this.state.openSidebar
             : null,
         ...selectGroupsForSelectedElements(
@@ -4481,7 +4480,7 @@ class App extends React.Component<AppProps, AppState> {
         event[KEYS.CTRL_OR_CMD] &&
         (event.key === KEYS.BACKSPACE || event.key === KEYS.DELETE)
       ) {
-        editorJotaiStore.set(activeConfirmDialogAtom, "clearCanvas");
+        this.props.editorJotaiStore.set(activeConfirmDialogAtom, "clearCanvas");
       }
 
       // eye dropper
@@ -6274,7 +6273,7 @@ class App extends React.Component<AppProps, AppState> {
           focus: false,
         })),
       }));
-      editorJotaiStore.set(searchItemInFocusAtom, null);
+      this.props.editorJotaiStore.set(searchItemInFocusAtom, null);
     }
 
     // since contextMenu options are potentially evaluated on each render,

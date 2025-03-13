@@ -40,6 +40,7 @@ import type { ContextMenuItems } from "./components/ContextMenu";
 import type { SnapLine } from "./snapping";
 import type { Merge, MaybePromise, ValueOf, MakeBrand } from "./utility-types";
 import type { StoreActionType } from "./store";
+import type { EditorJotaiStore } from "./editor-jotai";
 
 export type SocketId = string & { _brand: "SocketId" };
 
@@ -648,6 +649,7 @@ export type AppProps = Merge<
     isCollaborating: boolean;
     children?: React.ReactNode;
     aiEnabled: boolean;
+    editorJotaiStore: EditorJotaiStore;
   }
 >;
 
