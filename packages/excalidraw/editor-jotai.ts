@@ -10,4 +10,5 @@ export const EditorJotaiProvider: ReturnType<
   typeof createIsolation
 >["Provider"] = jotai.Provider;
 
-export const editorJotaiStore: ReturnType<typeof createStore> = createStore();
+export const createEditorJotaiStore: typeof createStore = createStore;
+export type EditorJotaiStore = ReturnType<typeof createStore>;

@@ -32,7 +32,7 @@ import {
 import { activeConfirmDialogAtom } from "../ActiveConfirmDialog";
 import { useSetAtom } from "../../editor-jotai";
 import { useUIAppState } from "../../context/ui-appState";
-import { openConfirmModal } from "../OverwriteConfirm/OverwriteConfirmState";
+import { useOpenConfirmModal } from "../OverwriteConfirm/OverwriteConfirmState";
 import Trans from "../Trans";
 import DropdownMenuItemContentRadio from "../dropdownMenu/DropdownMenuItemContentRadio";
 import { THEME } from "../../constants";
@@ -44,6 +44,8 @@ export const LoadScene = () => {
   const { t } = useI18n();
   const actionManager = useExcalidrawActionManager();
   const elements = useExcalidrawElements();
+
+  const openConfirmModal = useOpenConfirmModal();
 
   if (!actionManager.isActionEnabled(actionLoadScene)) {
     return null;

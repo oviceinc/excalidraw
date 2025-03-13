@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { InitializeApp } from "./components/InitializeApp";
 import App from "./components/App";
 import { isShallowEqual } from "./utils";
@@ -11,7 +11,7 @@ import "./fonts/fonts.css";
 import type { AppProps, ExcalidrawProps } from "./types";
 import { defaultLang } from "./i18n";
 import { DEFAULT_UI_OPTIONS } from "./constants";
-import { EditorJotaiProvider, editorJotaiStore } from "./editor-jotai";
+import { EditorJotaiProvider, createEditorJotaiStore } from "./editor-jotai";
 import Footer from "./components/footer/FooterCenter";
 import MainMenu from "./components/main-menu/MainMenu";
 import WelcomeScreen from "./components/welcome-screen/WelcomeScreen";
@@ -108,10 +108,13 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
     };
   }, []);
 
+  const [editorJotaiStore] = useState(() => createEditorJotaiStore());
+
   return (
     <EditorJotaiProvider store={editorJotaiStore}>
       <InitializeApp langCode={langCode} theme={theme}>
         <App
+          editorJotaiStore={editorJotaiStore}
           onChange={onChange}
           initialData={initialData}
           excalidrawAPI={excalidrawAPI}
