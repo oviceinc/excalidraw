@@ -31,7 +31,9 @@ export const getClientColor = (
 ) => {
   // to get more even distribution in case `id` is not uniformly distributed to
   // begin with, we hash it
-  const hash = Math.abs(hashToInteger(collaborator?.id || socketId));
+  const hash = Math.abs(
+    hashToInteger(collaborator?.username || collaborator?.id || socketId),
+  );
   // we want to get a multiple of 10 number in the range of 0-360 (in other
   // words a hue value of step size 10). There are 37 such values including 0.
   const hue = (hash % 37) * 10;
