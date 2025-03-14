@@ -3,11 +3,11 @@
 **Excalidraw** is exported as a component to directly embed in your projects.
 
 This is a forked package of Excalidraw with the following modifications:
-*	Added collaborative editing using Yjs
-*	Fixed shortcut key issues when using multiple instances
-*	Removed the Mermaid feature
-*	Removed other features deemed unnecessary
 
+- Added collaborative editing using Yjs
+- Fixed shortcut key issues when using multiple instances
+- Removed the Mermaid feature
+- Removed other features deemed unnecessary
 
 ## Installation
 
