@@ -12,12 +12,7 @@ import type {
 } from "../types";
 import type { StoreActionType } from "../store";
 
-export type ActionSource =
-  | "ui"
-  | "keyboard"
-  | "contextMenu"
-  | "api"
-  | "commandPalette";
+export type ActionSource = "ui" | "keyboard" | "contextMenu" | "api";
 
 /** if false, the action should be prevented */
 export type ActionResult =
@@ -126,7 +121,6 @@ export type ActionName =
   | "setEmbeddableAsActiveTool"
   | "createContainerFromText"
   | "wrapTextInContainer"
-  | "commandPalette"
   | "autoResize"
   | "elementStats"
   | "searchMenu"

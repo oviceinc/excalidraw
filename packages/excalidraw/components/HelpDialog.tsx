@@ -4,7 +4,7 @@ import { KEYS } from "../keys";
 import { Dialog } from "./Dialog";
 import { getShortcutKey } from "../utils";
 import "./HelpDialog.scss";
-import { isFirefox, isWindows } from "../constants";
+import { isWindows } from "../constants";
 import { getShortcutFromShortcutName } from "../actions/shortcuts";
 
 const Section = (props: { title: string; children: React.ReactNode }) => (
@@ -249,22 +249,21 @@ export const HelpDialog = ({ onClose }: { onClose?: () => void }) => {
               label={t("search.title")}
               shortcuts={[getShortcutFromShortcutName("searchMenu")]}
             />
-            <Shortcut
-              label={t("commandPalette.title")}
-              shortcuts={
-                isFirefox
-                  ? [getShortcutFromShortcutName("commandPalette")]
-                  : [
-                      getShortcutFromShortcutName("commandPalette"),
-                      getShortcutFromShortcutName("commandPalette", 1),
-                    ]
-              }
-            />
           </ShortcutIsland>
           <ShortcutIsland
             className="HelpDialog__island--editor"
             caption={t("helpDialog.editor")}
           >
+            <Shortcut
+              label={t("helpDialog.createFlowchart")}
+              shortcuts={[getShortcutKey(`CtrlOrCmd+Arrow Key`)]}
+              isOr={true}
+            />
+            <Shortcut
+              label={t("helpDialog.navigateFlowchart")}
+              shortcuts={[getShortcutKey(`Alt+Arrow Key`)]}
+              isOr={true}
+            />
             <Shortcut
               label={t("labels.moveCanvas")}
               shortcuts={[
