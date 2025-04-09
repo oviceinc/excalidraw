@@ -1,4 +1,3 @@
-import { DEFAULT_CATEGORIES } from "../components/CommandPalette/CommandPalette";
 import { LinearElementEditor } from "../element/linearElementEditor";
 import { isElbowArrow, isLinearElement } from "../element/typeChecks";
 import type { ExcalidrawLinearElement } from "../element/types";
@@ -10,7 +9,7 @@ import { lineEditorIcon } from "../components/icons";
 
 export const actionToggleLinearEditor = register({
   name: "toggleLinearEditor",
-  category: DEFAULT_CATEGORIES.elements,
+  category: "Elements",
   label: (elements, appState, app) => {
     const selectedElement = app.scene.getSelectedElements({
       selectedElementIds: appState.selectedElementIds,
