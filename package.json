@@ -8,6 +8,7 @@
   ],
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
+    "@changesets/cli": "^2.29.4",
     "@excalidraw/eslint-config": "1.0.3",
     "@excalidraw/prettier-config": "1.0.2",
     "@types/chai": "4.3.0",
@@ -69,7 +70,10 @@
     "clean-install": "yarn rm:node_modules && yarn install",
     "publish": "yarn workspaces foreach -A run publish",
     "build": "yarn workspaces foreach -R --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' run build",
-    "version-patch": "yarn workspaces foreach -Rpt --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' version patch"
+    "changeset": "changeset",
+    "changeset:version": "changeset version",
+    "changeset:publish": "changeset publish",
+    "release": "yarn build && yarn changeset:publish"
   },
   "resolutions": {
     "@types/react": "18.2.0",
