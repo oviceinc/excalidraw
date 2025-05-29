@@ -37,8 +37,7 @@ jobs:
         with:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: |
-            npm config set //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-            yarn run release
+            npm config set //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }} && yarn run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
