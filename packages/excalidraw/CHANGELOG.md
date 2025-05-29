@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.27
+
+### Patch Changes
+
+- 118d2fb: release
+
 ## 0.17.26
 
 ### Patch Changes
