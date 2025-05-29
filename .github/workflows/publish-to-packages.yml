@@ -33,4 +33,4 @@ jobs:
       - name: Publish to GitHub Packages
         run: |
           npm config set //npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}
-          yarn run publish
+          yarn run release
