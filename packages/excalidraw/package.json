@@ -1,6 +1,6 @@
 {
   "name": "@oviceinc/excalidraw",
-  "version": "0.17.26",
+  "version": "0.17.27",
   "main": "./dist/excalidraw.js",
   "type": "module",
   "module": "./dist/excalidraw.js",
