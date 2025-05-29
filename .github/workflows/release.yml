@@ -70,9 +70,6 @@ jobs:
               
               echo "Creating GitHub Release for tag: $tag_name"
               
-              # Create or get the release
-              gh release create "$tag_name" --title "Release $tag_name" --notes "Release $tag_name" || true
-              
               # Upload tgz files
               for file in "$package_dir"/*.tgz; do
                 if [ -f "$file" ]; then
