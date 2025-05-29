@@ -1,4 +1,4 @@
-name: Publish to GitHub Packages if needed
+name: Release
 
 on:
   push:
@@ -6,9 +6,12 @@ on:
       - master
 
 permissions:
-  contents: read
+  contents: write
   packages: write
+  
 
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 jobs:
   publish:
     runs-on: ubuntu-latest
