@@ -35,7 +35,7 @@
   "homepage": "https://github.com/excalidraw/excalidraw/tree/master/packages/excalidraw",
   "scripts": {
     "build": "tsc",
-    "pack": "yarn build && yarn pack",
+    "pack": "yarn build && npm pack",
     "publish": "npm publish || true"
   }
 }

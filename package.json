@@ -70,6 +70,7 @@
     "clean-install": "yarn rm:node_modules && yarn install",
     "publish": "yarn workspaces foreach -A run publish",
     "build": "yarn workspaces foreach -R --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' run build",
+    "pack": "yarn workspaces foreach -R --from '{@oviceinc/excalidraw,@oviceinc/y-excalidraw}' run pack",
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",

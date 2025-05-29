@@ -136,7 +136,7 @@
     "gen:types": "rm -rf types && tsc",
     "build": "vite build && tsc",
     "build:esm": "vite build",
-    "pack": "build && yarn pack",
+    "pack": "yarn build && npm pack",
     "start": "vite",
     "size": "yarn build && size-limit",
     "publish": "npm publish || true"
