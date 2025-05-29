@@ -30,7 +30,13 @@ jobs:
       - run: corepack enable
       - name: Install dependencies
         run: yarn install
-
+      - name: Creating .npmrc
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+            //npm.pkg.github.com/:_authToken=$GITHUB_TOKEN
+          EOF
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
@@ -41,13 +47,59 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Upload packages to GitHub Release
         if: steps.changesets.outputs.published == 'true'
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ fromJson(steps.changesets.outputs.publishedPackages)[0].version }}
-          files: |
-            packages/*/*.tgz
+        run: |
+          echo "Packages published successfully."
+          
+          # Parse published packages JSON
+          published_packages='${{ steps.changesets.outputs.publishedPackages }}'
+          echo "Published packages: $published_packages"
+          
+          # Function to process package release
+          process_package_release() {
+            local package_name="$1"
+            local package_dir="$2"
+            
+            if echo "$published_packages" | jq -r '.[].name' | grep -q "$package_name"; then
+              echo "Found $package_name in published packages"
+              
+              # Get the version
+              version=$(echo "$published_packages" | jq -r ".[] | select(.name == \"$package_name\") | .version")
+              tag_name="$package_name@$version"
+              
+              echo "Creating GitHub Release for tag: $tag_name"
+              
+              # Create or get the release
+              gh release create "$tag_name" --title "Release $tag_name" --notes "Release $tag_name" || true
+              
+              # Upload tgz files
+              for file in "$package_dir"/*.tgz; do
+                if [ -f "$file" ]; then
+                  echo "Uploading $file to release $tag_name"
+                  gh release upload "$tag_name" "$file" --clobber
+                fi
+              done
+              
+              return 0
+            fi
+            return 1
+          }
+          
+          # Process packages
+          found_packages=0
+          
+          if process_package_release "@oviceinc/y-excalidraw" "packages/y-excalidraw"; then
+            ((found_packages++))
+          fi
+          
+          if process_package_release "@oviceinc/excalidraw" "packages/excalidraw"; then
+            ((found_packages++))
+          fi
+          
+          # Log if no packages were found
+          if [ $found_packages -eq 0 ]; then
+            echo "Neither @oviceinc/y-excalidraw nor @oviceinc/excalidraw found in published packages"
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
