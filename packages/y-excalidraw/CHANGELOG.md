@@ -1,5 +1,12 @@
 # @oviceinc/y-excalidraw
 
+## 0.2.7
+
+### Patch Changes
+
+- Updated dependencies [ca9a8e1]
+  - @oviceinc/excalidraw@0.17.29
+
 ## 0.2.6
 
 ### Patch Changes
