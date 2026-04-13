@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.29
+
+### Patch Changes
+
+- ca9a8e1: Move tunnel-rat patch reference from package dependencies to monorepo root resolutions so consumers can resolve the dependency normally.
+
 ## 0.17.28
 
 ### Patch Changes
