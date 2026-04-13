@@ -84,7 +84,7 @@
     "pwacompat": "2.0.17",
     "roughjs": "4.6.4",
     "sass": "1.51.0",
-    "tunnel-rat": "patch:tunnel-rat@npm%3A0.1.2#~/.yarn/patches/tunnel-rat-npm-0.1.2-69bf8f367e.patch"
+    "tunnel-rat": "0.1.2"
   },
   "devDependencies": {
     "@babel/core": "7.24.5",
