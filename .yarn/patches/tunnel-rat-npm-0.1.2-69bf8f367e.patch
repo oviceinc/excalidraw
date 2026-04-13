@@ -1,0 +1,68 @@
+diff --git a/dist/index.cjs.js b/dist/index.cjs.js
+index ba8032c7a3c9fb8d606dba81f25455fedbdf0a08..935cc9f007cca26283414f943384919371e49a03 100644
+--- a/dist/index.cjs.js
++++ b/dist/index.cjs.js
+@@ -51,11 +51,13 @@ function tunnel() {
+         }) => ({
+           current: [...current, children]
+         }));
+-        return () => set(({
+-          current
+-        }) => ({
+-          current: current.filter(c => c !== children)
+-        }));
++        return () => {
++          queueMicrotask(() => set(({
++            current
++          }) => ({
++            current: current.filter(c => c !== children)
++          })));
++        };
+       }, [children, version]);
+       return null;
+     },
+diff --git a/dist/index.js b/dist/index.js
+index 3c23492235b73c6608ac1efbbd0fdff695689ed0..cef6339fc49bb86c58a9d1e885283477f71abff4 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -45,11 +45,13 @@ function tunnel() {
+         }) => ({
+           current: [...current, children]
+         }));
+-        return () => set(({
+-          current
+-        }) => ({
+-          current: current.filter(c => c !== children)
+-        }));
++        return () => {
++          queueMicrotask(() => set(({
++            current
++          }) => ({
++            current: current.filter(c => c !== children)
++          })));
++        };
+       }, [children, version]);
+       return null;
+     },
+diff --git a/src/index.tsx b/src/index.tsx
+index 1f0f6c1093ca3a287a0612c13e51fcc61329cd09..d2bd3928d8e16000ca51ffdf881127a86bd1de6d 100644
+--- a/src/index.tsx
++++ b/src/index.tsx
+@@ -39,10 +39,13 @@ export default function tunnel() {
+           current: [...current, children],
+         }))
+ 
+-        return () =>
+-          set(({ current }) => ({
+-            current: current.filter((c) => c !== children),
+-          }))
++        return () => {
++          queueMicrotask(() =>
++            set(({ current }) => ({
++              current: current.filter((c) => c !== children),
++            }))
++          )
++        }
+       }, [children, version])
+ 
+       return null
