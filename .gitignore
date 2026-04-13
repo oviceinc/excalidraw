@@ -9,7 +9,8 @@
 .idea
 .vercel
 .vscode
-.yarn
+.yarn/*
+!.yarn/patches
 *.log
 *.tgz
 build
