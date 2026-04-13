@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.28
+
+### Patch Changes
+
+- 03f1782: Fix white screen caused by tunnel-rat infinite update loop on Electron (ZERO-9972)
+
+  Patch tunnel-rat's useLayoutEffect cleanup to defer zustand set() via queueMicrotask, preventing cascading re-renders when multiple tunnel instances unmount simultaneously.
+
 ## 0.17.27
 
 ### Patch Changes

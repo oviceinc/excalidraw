@@ -1,5 +1,13 @@
 # y-excalidraw-example
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [03f1782]
+  - @oviceinc/excalidraw@0.17.28
+  - @oviceinc/y-excalidraw@0.2.6
+
 ## 0.0.2
 
 ### Patch Changes
